@@ -3,15 +3,13 @@
 
 typedef enum
 {
-  	__stEmpty_Key		= 0 ,  
-	
-	__stKey_CH5_Up		= 1 , 
-	__stKey_CH5_Down	= 2 , 
-	
-	__stKey_CH6_Up		= 3 ,
-	__stKey_CH6_Down	= 4 ,
-
+ 	__stEmpty_Key		= 0 ,  	
+	__stKey_CH5    		= 1 , 
+	__stKey_CH6     	= 2 , 	
+	__stKey_CH7		= 3 ,
+	__stKey_CH8     	= 4 ,
 }ChannelKeyTypeDef ; 
+
 
 typedef enum
 {

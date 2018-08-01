@@ -7,7 +7,7 @@
 ==============================================================================*/
 #include "include.h"
 
-//通道切换按键 : 短按
+//20180801：通道切换按键 : 短按 / 长按，根据dip78状态，判断是否长按，AUX12(CH56)、AUX34(CH78)分为两组
 volatile ChannelKeyTypeDef ChannelKeyValue 	= __stEmpty_Key; 
 
 //微调按键 : 短按 / 连发
@@ -15,22 +15,21 @@ volatile ChannelKeyTypeDef ChannelKeyValue 	= __stEmpty_Key;
 //连发判定 : down(1S)   -> down(50mS 触发一次按键) -> up(20mS)
 volatile OffSetKeyTypeDef  OffSetKeyValue  	 = __stOffset_EmptyKey ; 
 // [x][0] : downcnt        [x][1] : upcnt
-static uint8_t ChannelkeyTemp[5][2] = 
+static uint8_t ChannelkeyTemp[5][3] = 
 {
   	{ 0 , 0 } , //为了与按键顺序对齐
 	
-	//CH5
-	{ 0 , 0 } , //上
-	{ 0 , 0 } , //下
-	
-	//CH6
-	{ 0 , 0 } , //上
-	{ 0 , 0 } , //下
+	//20180801：CH5-8
+        // [x][0] : downcnt 
+        // [x][1] : continumcnt
+        // [x][2] : upcnt
+	{ 0 , 0 } , 
+	{ 0 , 0 } , 
+	{ 0 , 0 } , 
+	{ 0 , 0 } , 
 };
 
-// [x][0] : downcnt 
-// [x][1] : continumcnt
-// [x][2] : upcnt
+
 static uint8_t OffSetKeyTemp[9][3] = 
 {
   	{ 0 , 0 , 0} , //为了与按键顺序对齐
@@ -98,25 +97,49 @@ void key_int(void)
 	GPIOC -> DDR &= ~(1<<0) ;
 }
 
+
 static void ChannelKey_Scan(GPIO_TypeDef* GPIOx , uint8_t GPIO_Pin , ChannelKeyTypeDef KeyNum)
-{
+{            
+        
+        //按键按下
 	if(!(GPIOx -> IDR & (uint8_t)GPIO_Pin))
 	{
-		 if(ChannelkeyTemp[KeyNum][0] < 4) ++ChannelkeyTemp[KeyNum][0];
-		 ChannelkeyTemp[KeyNum][1] = 0;
+                bool LongClick_flg = (bool)(((KeyNum < __stKey_CH7) && (GPIOG -> IDR & (1<<2)==1))||((KeyNum > __stKey_CH6) && (GPIOG -> IDR & (1<<3)==1)));
+         
+	  	ChannelkeyTemp[KeyNum][2] = 0;
+		if(ChannelkeyTemp[KeyNum][0] < 50) 
+		{
+			++ChannelkeyTemp[KeyNum][0];
+			ChannelkeyTemp[KeyNum][1] = 0 ; 
+			
+			//触发短按
+                        if(ChannelkeyTemp[KeyNum][0] == 5 && !LongClick_flg) ChannelKeyValue = KeyNum ; 
+		}
+		else
+                {
+		  	//触发长按
+		 	if(ChannelkeyTemp[KeyNum][1] = 15 && LongClick_flg) 
+                        {
+                          //ChannelkeyTemp[KeyNum][1] = 0 ;   
+                          ChannelKeyValue = KeyNum ;
+                          
+                        }
+			else
+			{
+                          ++ChannelkeyTemp[KeyNum][1];	
+			} 
+		}
+		 
 	}
 	else
-	{
-		if(ChannelkeyTemp[KeyNum][1] < 5) ++ChannelkeyTemp[KeyNum][1];
+	{	//按键松开 50mS
+		if(ChannelkeyTemp[KeyNum][2] < 5) ++ChannelkeyTemp[KeyNum][2];
 		else
 		{
-			if(ChannelkeyTemp[KeyNum][0] >= 4)
-			{
-				ChannelKeyValue = KeyNum ; 
-			}
 			ChannelkeyTemp[KeyNum][0] = 0 ;
 		}
-	}
+	}    
+        
 }
 
 static void OffSetKey_Scan(GPIO_TypeDef* GPIOx , uint8_t GPIO_Pin , OffSetKeyTypeDef KeyNum)
@@ -161,12 +184,13 @@ static void OffSetKey_Scan(GPIO_TypeDef* GPIOx , uint8_t GPIO_Pin , OffSetKeyTyp
 void key_Scan(void)
 {
 	//CH5
-	ChannelKey_Scan(GPIOC , GPIO_Pin_4 , __stKey_CH5_Up) ;
-	ChannelKey_Scan(GPIOC , GPIO_Pin_5 , __stKey_CH5_Down) ;
-	
-	//CH6
-	ChannelKey_Scan(GPIOE , GPIO_Pin_5 , __stKey_CH6_Up) ;
-	ChannelKey_Scan(GPIOE , GPIO_Pin_4 , __stKey_CH6_Down) ;
+	ChannelKey_Scan(GPIOC , GPIO_Pin_4 , __stKey_CH5) ;
+        //CH6
+	ChannelKey_Scan(GPIOC , GPIO_Pin_5 , __stKey_CH6) ;
+	//CH7
+	ChannelKey_Scan(GPIOE , GPIO_Pin_5 , __stKey_CH7) ;
+        //CH8
+	ChannelKey_Scan(GPIOE , GPIO_Pin_4 , __stKey_CH8) ;
 	
 	//8个微调按键
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -345,8 +369,8 @@ void InversionKey_Scan(void)
 			if(InversionKey_Temp & 0x40) ChannelInversion_flg &= 0xFB ;	//ELEVATOR
 			if(InversionKey_Temp & 0x20) ChannelInversion_flg &= 0xF7 ;	//AILERON
 			
-			if(InversionKey_Temp & 0x01) ChannelInversion_flg &= 0xEF ;	//AUX1
-			if(InversionKey_Temp & 0x02) ChannelInversion_flg &= 0xDF ;	//AUX2
+			if(InversionKey_Temp & 0x01) ChannelInversion_flg &= 0xAF ;	//AUX1、3
+			if(InversionKey_Temp & 0x02) ChannelInversion_flg &= 0x5F ;	//AUX2、4
 			
 		}
 	}

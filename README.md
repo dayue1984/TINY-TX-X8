@@ -1,29 +1,16 @@
 # TINY-TX-X8
-kingkong tiny tx x8 radio is a minimalism radio, it's use STM8L052R8(64K/4K) run at 12Mhz, wireless solutions is TI CC2500+CC2592
+This is a customized firmware for kingkong tiny x8 radio.
+The tiny x8 is based on STM8L052R8(64K/4K)@12Mhz, and the wireless solutions is TI CC2500+CC2592.
 
+Features:
+* Toggle AUX1-4 channels with buttons.
+* Led display for AUX1-4 channels.
+* Select channel click/long press type by dip7(Aux1/2) and dip8(Aux3/4).
+* Select channel reverse by dip5(Aux1/2) and dip6(Aux3/4).
 
+Working in progress, use at your own risk.
+* 20180801, Frsky D8 is in working.
 
-
-
-*************************************************************************
-FRSKY-D8/D16(non-EU,international firmware)firmware already release version v1.0, click here https://github.com/kingkong-rc/TINY-TX-X8/releases
-*************************************************************************
-FRSKY-D8/D16(non-EU,international firmware) 固件已经发布v1.0版本,点击此处 https://github.com/kingkong-rc/TINY-TX-X8/releases
-*************************************************************************
-
-*************************************************************************
-[FRSKY-D8] frsky d16 code will in this folder
-*************************************************************************
-[FRSKY-D16] frsky d16 code will in this folder
-*************************************************************************
-[OFFICIAL FW] folder include the official S-FHSS files.
-*************************************************************************
-[PDF] folder include manual of x8 radio.
-*************************************************************************
-[SCH] folder include x8 radio schematic.
-*************************************************************************
-[TOOLS] folder include the BIN to LDAFW tools and update tools.
-*************************************************************************
 
 
 

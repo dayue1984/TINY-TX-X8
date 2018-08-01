@@ -8,13 +8,13 @@
 #define LED_VOLT	0x01
 #define LED_BIND	0x02
 
-#define LED_CH5_H	0x04
-#define LED_CH5_M	0x08
-#define	LED_CH5_L	0x10
+#define LED_CH6_H	0x04
+#define LED_CH6_M	0x08
+#define	LED_CH5 	0x10
 
-#define LED_CH6_H	0x20
-#define LED_CH6_M	0x40
-#define LED_CH6_L	0x80
+#define LED_CH8_H	0x20
+#define LED_CH8_M	0x40
+#define LED_CH7 	0x80
 
 extern uint8_t LED_State_ON     ;
 extern uint8_t LED_State_Shake  ; 

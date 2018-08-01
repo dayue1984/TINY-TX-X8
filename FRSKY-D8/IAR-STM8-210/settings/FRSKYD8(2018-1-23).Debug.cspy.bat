@@ -19,6 +19,22 @@
 @REM 
 
 
-"C:\Program Files (x86)\IAR Systems\STM8-2102\Embedded Workbench 7.0\common\bin\cspybat" "C:\Program Files (x86)\IAR Systems\STM8-2102\Embedded Workbench 7.0\stm8\bin\stm8proc.dll" "C:\Program Files (x86)\IAR Systems\STM8-2102\Embedded Workbench 7.0\stm8\bin\stm8stlink.dll"  %1 --plugin "C:\Program Files (x86)\IAR Systems\STM8-2102\Embedded Workbench 7.0\stm8\bin\stm8bat.dll" --backend -B "-p" "C:\Program Files (x86)\IAR Systems\STM8-2102\Embedded Workbench 7.0\stm8\config\ddf\iostm8l052r8.ddf" "-d" "stlink" "--mcuname" "STM8L052R8" 
+@echo off 
 
+if not "%~1" == "" goto debugFile 
 
+@echo on 
+
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.3\common\bin\cspybat" -f "C:\Users\wang_\Documents\GitHub\TINY-TX-X8\FRSKY-D8\IAR-STM8-210\settings\FRSKYD8(2018-1-23).Debug.general.xcl" --backend -f "C:\Users\wang_\Documents\GitHub\TINY-TX-X8\FRSKY-D8\IAR-STM8-210\settings\FRSKYD8(2018-1-23).Debug.driver.xcl" 
+
+@echo off 
+goto end 
+
+:debugFile 
+
+@echo on 
+
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.3\common\bin\cspybat" -f "C:\Users\wang_\Documents\GitHub\TINY-TX-X8\FRSKY-D8\IAR-STM8-210\settings\FRSKYD8(2018-1-23).Debug.general.xcl" "--debug_file=%~1" --backend -f "C:\Users\wang_\Documents\GitHub\TINY-TX-X8\FRSKY-D8\IAR-STM8-210\settings\FRSKYD8(2018-1-23).Debug.driver.xcl" 
+
+@echo off 
+:end

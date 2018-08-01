@@ -99,7 +99,7 @@ void Init_EEPROM_Dat(void)
 		Write_EE_Byte(IS_EVER_INITEEPROM_FLG & 0xFF   , IS_EVER_INITEEPROM_ADDR + 1);
 		
 		//==============================================================
-		//5-6通道，默认初始化为最低档位
+		//20180801：5-8通道，默认初始化为最低档位
 		//==============================================================
 		Sampling_Data[AUX1] = ADC_AUX_LOW ;  
 		Write_EE_Byte(Sampling_Data[AUX1] >> 8    , AUX1VALUE_ADDR);
@@ -108,6 +108,14 @@ void Init_EEPROM_Dat(void)
 		Sampling_Data[AUX2] = ADC_AUX_LOW ;  
 		Write_EE_Byte(Sampling_Data[AUX2] >> 8    , AUX2VALUE_ADDR);
 		Write_EE_Byte(Sampling_Data[AUX2] & 0xFF  , AUX2VALUE_ADDR + 1);
+                
+		Sampling_Data[AUX3] = ADC_AUX_LOW ;  
+		Write_EE_Byte(Sampling_Data[AUX3] >> 8    , AUX3VALUE_ADDR);
+		Write_EE_Byte(Sampling_Data[AUX3] & 0xFF  , AUX3VALUE_ADDR + 1);
+                
+		Sampling_Data[AUX4] = ADC_AUX_LOW ;  
+		Write_EE_Byte(Sampling_Data[AUX4] >> 8    , AUX4VALUE_ADDR);
+		Write_EE_Byte(Sampling_Data[AUX4] & 0xFF  , AUX4VALUE_ADDR + 1);
 		
 		//==============================================================
 		// 初始化偏置(默认初始化为 50(无偏置  0/100 最小 最大偏置))
@@ -140,18 +148,29 @@ void Init_EEPROM_Dat(void)
 	else
 	{
   		//======================================================================
-		//	档位存储 : AUX1(1200 / 1800)   AUX2(1200 / 1500 / 1800)
+		//20180801：档位存储 AUX1、3(1200 / 1800)   AUX2、4(1200 / 1500 / 1800)
   		//======================================================================
   		Temp = Read_EE_Word(AUX1VALUE_ADDR) ; 
 		if(Temp > ADC_AUX_HIGH) Temp = ADC_AUX_HIGH ; 
 		if(Temp >= ADC_AUX_HIGH)     			{Sampling_Data[AUX1] = ADC_AUX_HIGH ; }
 		else 						{Sampling_Data[AUX1] = ADC_AUX_LOW  ; }
-	
+
+  		Temp = Read_EE_Word(AUX3VALUE_ADDR) ; 
+		if(Temp > ADC_AUX_HIGH) Temp = ADC_AUX_HIGH ; 
+		if(Temp >= ADC_AUX_HIGH)     			{Sampling_Data[AUX3] = ADC_AUX_HIGH ; }
+		else 						{Sampling_Data[AUX3] = ADC_AUX_LOW  ; }               
+                
 		Temp = Read_EE_Word(AUX2VALUE_ADDR) ; 
 		if(Temp > ADC_AUX_HIGH) Temp = ADC_AUX_HIGH ; 
 		if(Temp >= ADC_AUX_HIGH)     			{Sampling_Data[AUX2] = ADC_AUX_HIGH ; }
 		else if(Temp >= ADC_AUX_MID) 			{Sampling_Data[AUX2] = ADC_AUX_MID  ; }
 		else 						{Sampling_Data[AUX2] = ADC_AUX_LOW  ; }
+
+		Temp = Read_EE_Word(AUX4VALUE_ADDR) ; 
+		if(Temp > ADC_AUX_HIGH) Temp = ADC_AUX_HIGH ; 
+		if(Temp >= ADC_AUX_HIGH)     			{Sampling_Data[AUX4] = ADC_AUX_HIGH ; }
+		else if(Temp >= ADC_AUX_MID) 			{Sampling_Data[AUX4] = ADC_AUX_MID  ; }
+		else 						{Sampling_Data[AUX4] = ADC_AUX_LOW  ; }
 		
 		//==============================================================
 		//			微调偏置值

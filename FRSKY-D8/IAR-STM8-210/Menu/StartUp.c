@@ -1,6 +1,6 @@
 #include "include.h"
 
-#define OVERTIME_MAX 15 	//遥控器静止超过 15Min 报警
+#define OVERTIME_MAX 10 	//遥控器静止超过 10Min 报警
 
 //摇杆映射曲线
 const uint16_t OutputCode[420] = 
@@ -149,7 +149,8 @@ uint16_t Get_SendValue(ChannelTypeDef Channel)
 	}
 	
 	//是否需要反向
-	if((Channel < 6) && (ChannelInversion_flg & (1<<Channel)))
+        //20180801：增加AUX3、4
+	if((Channel < 8) && (ChannelInversion_flg & (1<<Channel)))
 	{
 		 OutputTemp = 2*Output_Mid - OutputTemp;
 	}
@@ -167,17 +168,61 @@ uint16_t Get_SendValue(ChannelTypeDef Channel)
 //true : 当前显示遥控器通道     false : 清零LED显示，方便用于报警显示
 void Init_ChannelDis(bool ONOFF_flg)
 {
-  	LED_State_ON 	&= LED_NONE ; 
-	LED_State_Shake &= LED_NONE ; 
+        LED_State_ON &= LED_NONE ; 
+        LED_State_Shake &= LED_NONE ;
   	//显示当前通道档位
 	if(ONOFF_flg == true)
 	{
-		if(Sampling_Data[AUX1]      >= ADC_AUX_HIGH) 	{LED_State_ON &= ~(LED_CH5_M|LED_CH5_L) ; LED_State_ON |= LED_CH5_H ;}
-		else 						{LED_State_ON &= ~(LED_CH5_H|LED_CH5_M) ; LED_State_ON |= LED_CH5_L ;}
-			
-		if(Sampling_Data[AUX2]      >= ADC_AUX_HIGH)    {LED_State_ON &= ~(LED_CH6_M|LED_CH6_L) ; LED_State_ON |= LED_CH6_H ;}
-		else if(Sampling_Data[AUX2] >= ADC_AUX_MID) 	{LED_State_ON &= ~(LED_CH6_H|LED_CH6_L) ; LED_State_ON |= LED_CH6_M ;}
-		else 						{LED_State_ON &= ~(LED_CH6_H|LED_CH6_M) ; LED_State_ON |= LED_CH6_L ;}
+		//6高
+                if(Sampling_Data[AUX2] >= ADC_AUX_HIGH)
+                  {
+                    //56全亮
+                    if(Sampling_Data[AUX1] >= ADC_AUX_HIGH) { LED_State_ON |= LED_CH5|LED_CH6_M|LED_CH6_H ;}
+                    //5灭，6全亮
+                    else {LED_State_ON &= ~(LED_CH5) ; LED_State_ON |= LED_CH6_M|LED_CH6_H ;}
+                  }
+                //6中
+		else if(Sampling_Data[AUX2] >= ADC_AUX_MID)
+                  {
+                    //5亮，6中
+                    if(Sampling_Data[AUX1] >= ADC_AUX_HIGH) { LED_State_ON &= ~(LED_CH6_H) ; LED_State_ON |= LED_CH5|LED_CH6_M ;}
+                    //5灭，6中
+                    else {LED_State_ON &= ~(LED_CH5|LED_CH6_H) ; LED_State_ON |= LED_CH6_M ;}
+                  }
+                //6低
+                else
+                  {
+                    //5亮，6灭
+                    if(Sampling_Data[AUX1] >= ADC_AUX_HIGH) { LED_State_ON &= ~(LED_CH6_H|LED_CH6_M) ; LED_State_ON |= LED_CH5 ;}
+                    //5灭，6灭
+                    else {LED_State_ON &= ~(LED_CH5|LED_CH6_H|LED_CH6_M) ;}
+                  }
+                
+                
+		//8高，AUX3、4
+                if(Sampling_Data[AUX4] >= ADC_AUX_HIGH)
+                  {
+                    //78全亮
+                    if(Sampling_Data[AUX3] >= ADC_AUX_HIGH) { LED_State_ON |= LED_CH7|LED_CH8_M|LED_CH8_H ;}
+                    //7灭，8全亮
+                    else {LED_State_ON &= ~(LED_CH7) ; LED_State_ON |= LED_CH8_M|LED_CH8_H ;}
+                  }
+                //8中
+		else if(Sampling_Data[AUX4] >= ADC_AUX_MID)
+                  {
+                    //7亮，8中
+                    if(Sampling_Data[AUX3] >= ADC_AUX_HIGH) { LED_State_ON &= ~(LED_CH8_H) ; LED_State_ON |= LED_CH7|LED_CH8_M ;}
+                    //7灭，8中
+                    else {LED_State_ON &= ~(LED_CH7|LED_CH8_H) ; LED_State_ON |= LED_CH8_M ;}
+                  }
+                //8低
+                else
+                  {
+                    //7亮，8灭
+                    if(Sampling_Data[AUX3] >= ADC_AUX_HIGH) { LED_State_ON &= ~(LED_CH8_H|LED_CH8_M) ; LED_State_ON |= LED_CH7 ;}
+                    //7灭，8灭
+                    else {LED_State_ON &= ~(LED_CH7|LED_CH8_H|LED_CH8_M) ;}
+                  }
 	}
 }
 
@@ -331,7 +376,8 @@ void StaticOverTime(void)
 {
 	//保存上次摇杆AD采样值，和当前AD比对，如果变化大于40/60，更新(清零静止计时)。否则不变
   	static uint16_t Sampling_HSK_AD_LastValue[5] ; 
-	static uint8_t  AUX3AUX4_LastState = 0 ; 
+	//20180801：AUX3、4 状态通过EE存储
+        //static uint8_t  AUX3AUX4_LastState = 0 ; 
 	//静止超时计数
 	static uint16_t StaticOverTime_Secondcnt = 0 ; 
 	static uint8_t  StaticOverTime_Mincnt	 = 0 ;
@@ -343,16 +389,17 @@ void StaticOverTime(void)
 	  	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	  	//!!!!!!!!!!!!! 只需比较四个摇杆和一个电位器AD值!!!!!!!!!!!!!!!!
 	  	//!!!!!!!!!!!!!!!!!!!!!!!注意数组越界!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //20180801：屏蔽AUX3、4的AD值更新
 	  	if(i < 4)
 		{
 			if(Sampling_HSK_AD_LastValue[i] > Sampling_Data[i]) Temp = Sampling_HSK_AD_LastValue[i] - Sampling_Data[i] ; 
 			else Temp = Sampling_Data[i] - Sampling_HSK_AD_LastValue[i] ; 
 		}
-		else
-		{
-			if(Sampling_HSK_AD_LastValue[4] > Sampling_Data[AUX3]) Temp = Sampling_HSK_AD_LastValue[4] - Sampling_Data[AUX3] ; 
-			else Temp = Sampling_Data[AUX3] - Sampling_HSK_AD_LastValue[4] ; 	
-		}
+		//else
+		//{
+			//if(Sampling_HSK_AD_LastValue[4] > Sampling_Data[AUX3]) Temp = Sampling_HSK_AD_LastValue[4] - Sampling_Data[AUX3] ; 
+			//else Temp = Sampling_Data[AUX3] - Sampling_HSK_AD_LastValue[4] ; 	
+		//}
 		
 		//==============================================================
 		//(1)在没有报警前，AD变化小于40 认为是静止。
@@ -362,7 +409,7 @@ void StaticOverTime(void)
 		{
 			StaticOverTime_Secondcnt = 0 ; StaticOverTime_Mincnt = 0 ;
 			if(i < 4) Sampling_HSK_AD_LastValue[i] = Sampling_Data[i] ; 	 //更新AD值
-			else 	  Sampling_HSK_AD_LastValue[4] = Sampling_Data[AUX3] ;   //更新AD值
+			//else 	  Sampling_HSK_AD_LastValue[4] = Sampling_Data[AUX3] ;   //更新AD值
 		}
 	}
 	
@@ -373,13 +420,13 @@ void StaticOverTime(void)
 	}
 	
 	//判断是否改变了 AUX3 AUX4的拨码位置
-	if(AUX3AUX4_LastState != (GPIOG -> IDR & ((1<<2)|(1<<3))))
-	{
-	  	StaticOverTime_Secondcnt = 0 ; StaticOverTime_Mincnt = 0 ;
-		AUX3AUX4_LastState = (GPIOG -> IDR & ((1<<2)|(1<<3))) ; 
-	}
+	//if(AUX3AUX4_LastState != (GPIOG -> IDR & ((1<<2)|(1<<3))))
+	//{
+	//  	StaticOverTime_Secondcnt = 0 ; StaticOverTime_Mincnt = 0 ;
+	//	AUX3AUX4_LastState = (GPIOG -> IDR & ((1<<2)|(1<<3))) ; 
+	//}
 	
-	//遥控器静止超过 15Min 遥控器报警
+	//遥控器静止超过 OVERTIME_MAX 遥控器报警
 	if(StaticOverTime_Mincnt >= OVERTIME_MAX)
 	{
 	  	//置位前需要判断 当前报警状态优先级 是否低于 静止超时报警
@@ -452,50 +499,168 @@ static void ST_StartWork(void)
 	////////			通道调整			////////
   	//注意 : AUX1(1200/1800 -> AD值850/3253)   AUX2(1200 / 1500 / 1800 -> AD值 850 / 2052 / 3253)
 	////////////////////////////////////////////////////////////////////////
-	if(ChannelKeyValue == __stKey_CH5_Up)	//CH5_UP(1200 / 1800)
+        //20180801：AUX1、3为两段开关（1200 / 1800），AUX2、4为三段开关（1200/ 1500 / 1800）
+	if(ChannelKeyValue == __stKey_CH5)	//CH5
 	{
 	 	if(RunStatus == __stNormal) beepCmd(NormalFreCounts , __stKeyClick);
-		
-		Sampling_Data[AUX1] = ADC_AUX_HIGH ;  LED_State_ON &= ~(LED_CH5_M|LED_CH5_L) ; LED_State_ON |= LED_CH5_H ; 
+                //AUX1高转低
+		if(Sampling_Data[AUX1] == ADC_AUX_HIGH ) {Sampling_Data[AUX1] = ADC_AUX_LOW; }
+                //AUX1低转高
+                else {Sampling_Data[AUX1] = ADC_AUX_HIGH; }
+                //刷新led显示
+		//6高，AUX1、2
+                if(Sampling_Data[AUX2] >= ADC_AUX_HIGH )
+                  {
+                    //56全亮
+                    if(Sampling_Data[AUX1] >= ADC_AUX_HIGH) { LED_State_ON |= LED_CH5|LED_CH6_M|LED_CH6_H ;}
+                    //5灭，6全亮
+                    else {LED_State_ON &= ~(LED_CH5) ; LED_State_ON |= LED_CH6_M|LED_CH6_H ;}
+                  }
+                //6中
+		else if(Sampling_Data[AUX2] >= ADC_AUX_MID )
+                  {
+                    //5亮，6中
+                    if(Sampling_Data[AUX1] >= ADC_AUX_HIGH) { LED_State_ON &= ~(LED_CH6_H) ; LED_State_ON |= LED_CH5|LED_CH6_M ;}
+                    //5灭，6中
+                    else {LED_State_ON &= ~(LED_CH5|LED_CH6_H) ; LED_State_ON |= LED_CH6_M ;}
+                  }
+                //6低
+                else
+                  {
+                    //5亮，6灭
+                    if(Sampling_Data[AUX1] >= ADC_AUX_HIGH) { LED_State_ON &= ~(LED_CH6_H|LED_CH6_M) ; LED_State_ON |= LED_CH5 ;}
+                    //5灭，6灭
+                    else {LED_State_ON &= ~(LED_CH5|LED_CH6_H|LED_CH6_M) ;}
+                  }
+		//Sampling_Data[AUX1] = ADC_AUX_HIGH ;  LED_State_ON &= ~(LED_CH5_M|LED_CH5_L) ; LED_State_ON |= LED_CH5_H ; 
 		//F**K , 因为 RWW 只支持单字节操作(单字节读写，不影响单片机其他操作，所以把数据拆分成两个单字节数据来操作)
 		Write_EE_Byte((Sampling_Data[AUX1] >> 8)   , AUX1VALUE_ADDR);
 		Write_EE_Byte((Sampling_Data[AUX1] & 0xFF) , AUX1VALUE_ADDR + 1);
 	}
-	else if(ChannelKeyValue == __stKey_CH5_Down) 	//CH5_DOWN
+	else if(ChannelKeyValue == __stKey_CH6) 	//CH6
 	{
 		if(RunStatus == __stNormal) beepCmd(NormalFreCounts , __stKeyClick);
-		
-		Sampling_Data[AUX1] = ADC_AUX_LOW ; LED_State_ON &= ~(LED_CH5_H|LED_CH5_M) ; LED_State_ON |= LED_CH5_L ; 
-		//F**K , 因为 RWW 只支持单字节操作(单字节读写，不影响单片机其他操作，所以把数据拆分成两个单字节数据来操作)
-		Write_EE_Byte((Sampling_Data[AUX1] >> 8)   , AUX1VALUE_ADDR);
-		Write_EE_Byte((Sampling_Data[AUX1] & 0xFF) , AUX1VALUE_ADDR + 1);
+                //AUX2高转低
+		if(Sampling_Data[AUX2] >= ADC_AUX_HIGH ) { Sampling_Data[AUX2] = ADC_AUX_LOW; }
+                //AUX2中转高
+                else if (Sampling_Data[AUX2] >= ADC_AUX_MID ) { Sampling_Data[AUX2] = ADC_AUX_HIGH; }
+                //AUX2低转中
+                else { Sampling_Data[AUX2] = ADC_AUX_MID; }
+                //刷新led显示
+		//6高，AUX1、2
+                if(Sampling_Data[AUX2] >= ADC_AUX_HIGH )
+                  {
+                    //56全亮
+                    if(Sampling_Data[AUX1] >= ADC_AUX_HIGH ) { LED_State_ON |= LED_CH5|LED_CH6_M|LED_CH6_H ;}
+                    //5灭，6全亮
+                    else {LED_State_ON &= ~(LED_CH5) ; LED_State_ON |= LED_CH6_M|LED_CH6_H ;}
+                  }
+                //6中
+		else if(Sampling_Data[AUX2] >= ADC_AUX_MID)
+                  {
+                    //5亮，6中
+                    if(Sampling_Data[AUX1] >= ADC_AUX_HIGH) { LED_State_ON &= ~(LED_CH6_H) ; LED_State_ON |= LED_CH5|LED_CH6_M ;}
+                    //5灭，6中
+                    else {LED_State_ON &= ~(LED_CH5|LED_CH6_H) ; LED_State_ON |= LED_CH6_M ;}
+                  }
+                //6低
+                else
+                  {
+                    //5亮，6灭
+                    if(Sampling_Data[AUX1] >= ADC_AUX_HIGH) { LED_State_ON &= ~(LED_CH6_H|LED_CH6_M) ; LED_State_ON |= LED_CH5 ;}
+                    //5灭，6灭
+                    else {LED_State_ON &= ~(LED_CH5|LED_CH6_H|LED_CH6_M) ;}
+                  }
+		//Sampling_Data[AUX1] = ADC_AUX_LOW ; LED_State_ON &= ~(LED_CH5_H|LED_CH5_M) ; LED_State_ON |= LED_CH5_L ; 
+                //F**K , 因为 RWW 只支持单字节操作(单字节读写，不影响单片机其他操作，所以把数据拆分成两个单字节数据来操作)
+		Write_EE_Byte((Sampling_Data[AUX2] >> 8)   , AUX2VALUE_ADDR);
+		Write_EE_Byte((Sampling_Data[AUX2] & 0xFF) , AUX2VALUE_ADDR + 1);
 	}
 	
-	else if(ChannelKeyValue == __stKey_CH6_Up)	//CH6_UP
+	else if(ChannelKeyValue == __stKey_CH7)	//CH7
 	{
 		if(RunStatus == __stNormal) beepCmd(NormalFreCounts , __stKeyClick);
-		
-		if(Sampling_Data[AUX2] < ADC_AUX_MID)      		{ Sampling_Data[AUX2] = ADC_AUX_MID  ; LED_State_ON &= ~(LED_CH6_H|LED_CH6_L) ; LED_State_ON |= LED_CH6_M ; }
-		else 				    			{ Sampling_Data[AUX2] = ADC_AUX_HIGH ; LED_State_ON &= ~(LED_CH6_M|LED_CH6_L) ; LED_State_ON |= LED_CH6_H ; }
+                //AUX3高转低
+		if(Sampling_Data[AUX3] == ADC_AUX_HIGH ) {Sampling_Data[AUX3] = ADC_AUX_LOW; }
+                //AUX3低转高
+                else {Sampling_Data[AUX3] = ADC_AUX_HIGH; }
+                //刷新led显示
+		//8高，AUX3、4
+                if(Sampling_Data[AUX4] >= ADC_AUX_HIGH)
+                  {
+                    //78全亮
+                    if(Sampling_Data[AUX3] >= ADC_AUX_HIGH) { LED_State_ON |= LED_CH7|LED_CH8_M|LED_CH8_H ;}
+                    //7灭，8全亮
+                    else {LED_State_ON &= ~(LED_CH7) ; LED_State_ON |= LED_CH8_M|LED_CH8_H ;}
+                  }
+                //8中
+		else if(Sampling_Data[AUX4] >= ADC_AUX_MID)
+                  {
+                    //7亮，8中
+                    if(Sampling_Data[AUX3] >= ADC_AUX_HIGH) { LED_State_ON &= ~(LED_CH8_H) ; LED_State_ON |= LED_CH7|LED_CH8_M ;}
+                    //7灭，8中
+                    else {LED_State_ON &= ~(LED_CH7|LED_CH8_H) ; LED_State_ON |= LED_CH8_M ;}
+                  }
+                //8低
+                else
+                  {
+                    //7亮，8灭
+                    if(Sampling_Data[AUX3] >= ADC_AUX_HIGH) { LED_State_ON &= ~(LED_CH8_H|LED_CH8_M) ; LED_State_ON |= LED_CH7 ;}
+                    //7灭，8灭
+                    else {LED_State_ON &= ~(LED_CH7|LED_CH8_H|LED_CH8_M) ;}
+                  }
+		//if(Sampling_Data[AUX2] < ADC_AUX_MID)      		{ Sampling_Data[AUX2] = ADC_AUX_MID  ; LED_State_ON &= ~(LED_CH6_H|LED_CH6_L) ; LED_State_ON |= LED_CH6_M ; }
+		//else 				    			{ Sampling_Data[AUX2] = ADC_AUX_HIGH ; LED_State_ON &= ~(LED_CH6_M|LED_CH6_L) ; LED_State_ON |= LED_CH6_H ; }
 		//F**K , 因为 RWW 只支持单字节操作(单字节读写，不影响单片机其他操作，所以把数据拆分成两个单字节数据来操作)
-		Write_EE_Byte((Sampling_Data[AUX2] >> 8)   , AUX2VALUE_ADDR);
-		Write_EE_Byte((Sampling_Data[AUX2] & 0xFF) , AUX2VALUE_ADDR + 1);
+		Write_EE_Byte((Sampling_Data[AUX3] >> 8)   , AUX3VALUE_ADDR);
+		Write_EE_Byte((Sampling_Data[AUX3] & 0xFF) , AUX3VALUE_ADDR + 1);
 	}
-	else if(ChannelKeyValue == __stKey_CH6_Down) 	//CH6_DOWN
+	else if(ChannelKeyValue == __stKey_CH8) 	//CH8
 	{
 		if(RunStatus == __stNormal) beepCmd(NormalFreCounts , __stKeyClick);
-		
-		if(Sampling_Data[AUX2] > ADC_AUX_MID)      		{ Sampling_Data[AUX2] = ADC_AUX_MID ; LED_State_ON &= ~(LED_CH6_H|LED_CH6_L) ; LED_State_ON |= LED_CH6_M ; }
-		else				   	 		{ Sampling_Data[AUX2] = ADC_AUX_LOW ; LED_State_ON &= ~(LED_CH6_H|LED_CH6_M) ; LED_State_ON |= LED_CH6_L ; }
+                //AUX4高转低
+		if(Sampling_Data[AUX4] >= ADC_AUX_HIGH ) { Sampling_Data[AUX4] = ADC_AUX_LOW; }
+                //AUX4中转高
+                else if (Sampling_Data[AUX4] >= ADC_AUX_MID ) { Sampling_Data[AUX4] = ADC_AUX_HIGH; }
+                //AUX4低转中
+                else { Sampling_Data[AUX4] = ADC_AUX_MID; }
+                //刷新led显示
+		//8高，AUX3、4
+                if(Sampling_Data[AUX4] >= ADC_AUX_HIGH)
+                  {
+                    //78全亮
+                    if(Sampling_Data[AUX3] >= ADC_AUX_HIGH) { LED_State_ON |= LED_CH7|LED_CH8_M|LED_CH8_H ;}
+                    //7灭，8全亮
+                    else {LED_State_ON &= ~(LED_CH7) ; LED_State_ON |= LED_CH8_M|LED_CH8_H ;}
+                  }
+                //8中
+		else if(Sampling_Data[AUX4] >= ADC_AUX_MID)
+                  {
+                    //7亮，8中
+                    if(Sampling_Data[AUX3] >= ADC_AUX_HIGH) { LED_State_ON &= ~(LED_CH8_H) ; LED_State_ON |= LED_CH7|LED_CH8_M ;}
+                    //7灭，8中
+                    else {LED_State_ON &= ~(LED_CH7|LED_CH8_H) ; LED_State_ON |= LED_CH8_M ;}
+                  }
+                //8低
+                else
+                  {
+                    //7亮，8灭
+                    if(Sampling_Data[AUX3] >= ADC_AUX_HIGH) { LED_State_ON &= ~(LED_CH8_H|LED_CH8_M) ; LED_State_ON |= LED_CH7 ;}
+                    //7灭，8灭
+                    else {LED_State_ON &= ~(LED_CH7|LED_CH8_H|LED_CH8_M) ;}
+                  }
+                //if(Sampling_Data[AUX2] > ADC_AUX_MID)      		{ Sampling_Data[AUX2] = ADC_AUX_MID ; LED_State_ON &= ~(LED_CH6_H|LED_CH6_L) ; LED_State_ON |= LED_CH6_M ; }
+		//else				   	 		{ Sampling_Data[AUX2] = ADC_AUX_LOW ; LED_State_ON &= ~(LED_CH6_H|LED_CH6_M) ; LED_State_ON |= LED_CH6_L ; }
 		//F**K , 因为 RWW 只支持单字节操作(单字节读写，不影响单片机其他操作，所以把数据拆分成两个单字节数据来操作)
-		Write_EE_Byte((Sampling_Data[AUX2] >> 8)   , AUX2VALUE_ADDR);
-		Write_EE_Byte((Sampling_Data[AUX2] & 0xFF) , AUX2VALUE_ADDR + 1);
+		Write_EE_Byte((Sampling_Data[AUX4] >> 8)   , AUX4VALUE_ADDR);
+		Write_EE_Byte((Sampling_Data[AUX4] & 0xFF) , AUX4VALUE_ADDR + 1);
 	}	
 	
 	//======================================================================
-	// 新增 AUX3 / AUX4  对应拨码开关 第 7 / 8 位
+	// 新增 AUX3 / AUX4  对应拨码开关 第 7 / 8 
+        // 20180801：DIP78 设置为 AUX12、34 短按、长按
 	//======================================================================
-	if((GPIOG -> IDR & (1<<2)) == 0)
+	/*if((GPIOG -> IDR & (1<<2)) == 0)
 	{
 		Sampling_Data[AUX3] = ADC_AUX_HIGH ; 
 	}
@@ -511,13 +676,13 @@ static void ST_StartWork(void)
 	else
 	{
 		Sampling_Data[AUX4] = ADC_AUX_LOW ; 
-	}
+	}*/
 	
 	//======================================================================
 	//遥控器静止超时判断:摇杆静止超过 15Min 
 	//(1)摇杆AD值变化小于 20  (2)且无任何按键按下 认为遥控器静止
 	//======================================================================
-	StaticOverTime();
+        StaticOverTime();
 }
 
 void (*pST[])(void) = 

@@ -491,7 +491,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>FRSKYD8(2018-1-23).bin</state>
+          <state>FRSKYD8(2018-8-1).bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -509,6 +509,7 @@
       <data>
         <extensions></extensions>
         <cmdline></cmdline>
+        <hasPrio>0</hasPrio>
       </data>
     </settings>
     <settings>
@@ -1301,6 +1302,7 @@
       <data>
         <extensions></extensions>
         <cmdline></cmdline>
+        <hasPrio>0</hasPrio>
       </data>
     </settings>
     <settings>

@@ -36,7 +36,7 @@ void PowerOn(void)
 		//无按键 / 无效按键 且中位值校准正常，启动 
 		else
 		{
-		  	//显示当前通道设置情况(AUX1 - AUX2)
+		  	//显示当前通道设置情况(AUX1 - AUX4)
 		  	Init_ChannelDis(true);
 			LED_State_Shake &= ~LED_BIND ;
 			LED_State_ON    |=  LED_BIND ; 

@@ -52,7 +52,7 @@ static void FT_GetHSKMidValue(void)
 	  	//==============================================================
 	  	//初始化 LED 状态
 	  	//==============================================================
-		LED_State_Shake = LED_CH5_L | LED_CH6_H | LED_CH6_L ;
+		LED_State_Shake = LED_CH5 | LED_CH6_M | LED_CH6_H ;
 		LED_State_ON = 0x00 ; 
 	  
 	  	//初始化清零中位校准故障标志位
@@ -75,11 +75,11 @@ static void FT_GetHSKMidValue(void)
 		if((Temp < AD_MidValue_Min) || (Temp > AD_MidValue_Max)) 		 //中位值校准有效性判断
 		{
 			FTDebug_err_flg = true ; 
-			LED_State_Shake |= LED_CH5_L ; LED_State_ON &= ~LED_CH5_L ;	 // RUDDER 中位值 校准故障提示  CH5_L LED闪烁
+			LED_State_Shake |= LED_CH5 ; LED_State_ON &= ~LED_CH5 ;	 // RUDDER 中位值 校准故障提示  CH5_L LED闪烁
 		}
 		else
 		{
-		  	LED_State_ON |= LED_CH5_L ; LED_State_Shake &= ~LED_CH5_L ;	 // RUDDER 中位值 校准正常提示
+		  	LED_State_ON |= LED_CH5 ; LED_State_Shake &= ~LED_CH5 ;	 // RUDDER 中位值 校准正常提示
 			Sampling_MaxMinData[RUDDER][MIDDAT] = Temp ;
 		}
 		
@@ -121,11 +121,11 @@ static void FT_GetHSKMidValue(void)
 		if((Temp < AD_MidValue_Min) || (Temp > AD_MidValue_Max)) 
 		{
 			FTDebug_err_flg = true ; 
-			LED_State_Shake |= LED_CH6_L ; LED_State_ON &= ~LED_CH6_L ;	 // AILERON 中位值 校准故障提示
+			LED_State_Shake |= LED_CH7 ; LED_State_ON &= ~LED_CH7 ;	 // AILERON 中位值 校准故障提示
 		}
 		else
 		{
-		  	LED_State_ON |= LED_CH6_L ; LED_State_Shake &= ~LED_CH6_L ;	 // AILERON 中位值 校准正常提示
+		  	LED_State_ON |= LED_CH7 ; LED_State_Shake &= ~LED_CH7 ;	 // AILERON 中位值 校准正常提示
 			Sampling_MaxMinData[AILERON][MIDDAT]  = Temp ; 
 		}
 		
@@ -203,12 +203,12 @@ static void  FT_GetHSKMaxMinValue(void)
 	//======================================================================
 	if(DisLEDCnts < 600) ++DisLEDCnts ; 
 	else                  DisLEDCnts = 0 ; 
-	if(DisLEDCnts < 100)  		LED_State_ON = LED_CH5_H ; 
-	else if(DisLEDCnts < 200)       LED_State_ON = LED_CH5_M ; 
-	else if(DisLEDCnts < 300)       LED_State_ON = LED_CH5_L ; 
-	else if(DisLEDCnts < 400)       LED_State_ON = LED_CH6_L ; 
-	else if(DisLEDCnts < 500)       LED_State_ON = LED_CH6_M ; 
-	else                            LED_State_ON = LED_CH6_H ;
+	if(DisLEDCnts < 100)  		LED_State_ON = LED_CH6_H ; 
+	else if(DisLEDCnts < 200)       LED_State_ON = LED_CH6_M ; 
+	else if(DisLEDCnts < 300)       LED_State_ON = LED_CH5 ; 
+	else if(DisLEDCnts < 400)       LED_State_ON = LED_CH7 ; 
+	else if(DisLEDCnts < 500)       LED_State_ON = LED_CH8_M ; 
+	else                            LED_State_ON = LED_CH8_H ;
 	
 	//校准左摇杆最大最小值 : 注意区分 美国手/日本手
 	if(MAXValueDebug_RightOrLeftflg == false)
@@ -377,8 +377,11 @@ static void FT_OK(void)
 		Write_EE_Byte(50   , ELE_OFFSET_ADDR);
 		Sampling_Offset[AILERON]  = 50 ; 
 		Write_EE_Byte(50   , AIL_OFFSET_ADDR);
-		
-		
+                
+                //防止操作 EEPROM ， 看门狗超时复位
+		//FeedTheDog();						//喂狗
+		//AUX1-AUX4
+                
 		//打开通道显示(更新 LED 显示)
 		Init_ChannelDis(true);
 		LED_State_ON    |= LED_BIND   ; 
