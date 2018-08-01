@@ -1,5 +1,5 @@
-# TINY-TX-X8
-This is a customized firmware for kingkong tiny x8 radio.
+# TINY-X8-PRO
+This is a customized firmware for kingkong tiny x8 radio, aimed at professional and functional.
 The tiny x8 is based on STM8L052R8(64K/4K)@12Mhz, and the wireless solutions is TI CC2500+CC2592.
 
 Features:
