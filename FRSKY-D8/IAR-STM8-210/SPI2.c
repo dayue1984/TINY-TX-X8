@@ -2,7 +2,7 @@
 
 void SPI2_Init(void)
 {
-  	//GPIO_INIT £º MOSI  SCK  
+  	//GPIO_INIT ï¼š MOSI  SCK  
 	GPIOG -> CR1 |= (1<<6)|(1<<5) ; 
 	GPIOG -> CR2 |= (1<<6)|(1<<5) ; 
 	GPIOG -> DDR |= (1<<6)|(1<<5) ; 
@@ -17,19 +17,19 @@ void SPI2_Init(void)
 	
 	//SPI2_Init
 	SPI2 -> CR1 &= ~(1<<6) ; 
-	SPI2 -> CR1 |= (1<<5)|(1<<3)|(1<<2) ; 					//³õÊ¼»¯ MSB first  Ê¹ÄÜ SPI f = 12M/64 = 187.5Khz(³õÊ¼»¯µÄÊ±ºòÏÈÉèÖÃÎªµÍËÙÄ£Ê½) ÉÏÉýÑØ²ÉÑù
+	SPI2 -> CR1 |= (1<<5)|(1<<3)|(1<<2) ; 					//åˆå§‹åŒ– MSB first  ä½¿èƒ½ SPI f = 12M/64 = 187.5Khz(åˆå§‹åŒ–çš„æ—¶å€™å…ˆè®¾ç½®ä¸ºä½Žé€Ÿæ¨¡å¼) ä¸Šå‡æ²¿é‡‡æ ·
 	SPI2 -> CR2 |= (1<<1)|(1<<0) ; 
 	
-	//Ê¹ÄÜSPI
+	//ä½¿èƒ½SPI
 	SPI2 -> CR1 |= (1<<6) ; 
 }
 
 
 void SPI2_wr_Byte(uint8_t Wdata)
 {
-  	while(!(SPI2 -> SR & (1<<1)));						//Ð´Èë·¢ËÍ»º´æÊý¾ÝÇ°£¬ÏÈµÈ´ý·¢ËÍ»º´æ¿Õ¡£
+  	while(!(SPI2 -> SR & (1<<1)));						//å†™å…¥å‘é€ç¼“å­˜æ•°æ®å‰ï¼Œå…ˆç­‰å¾…å‘é€ç¼“å­˜ç©ºã€‚
 	SPI2 -> DR = Wdata ; 
-	while(!(SPI2 -> SR & (1<<0)));						//µÈ´ýSPI2·¢ËÍÍê³É
+	while(!(SPI2 -> SR & (1<<0)));						//ç­‰å¾…SPI2å‘é€å®Œæˆ
 	Wdata = SPI2 -> DR ; 
 	GPIOG -> ODR |= (1<<6);
 }
@@ -40,7 +40,7 @@ uint8_t SPI2_rd_Byte(void)
   	uint8_t Rdata = 0 ; 
 	
 	SPI2 -> DR = 0xff ; 
-	while(!(SPI2 -> SR & (1<<0))) ; 					//µÈ´ý SPI2 ½ÓÊÕ»º´æ ·Ç¿Õ
+	while(!(SPI2 -> SR & (1<<0))) ; 					//ç­‰å¾… SPI2 æŽ¥æ”¶ç¼“å­˜ éžç©º
 	Rdata = SPI2 -> DR ; 
 	
 	return Rdata ; 

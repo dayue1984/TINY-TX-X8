@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.3\common\bin\cspybat" -f "C:\Users\wang_\Documents\GitHub\TINY-TX-X8\FRSKY-D16\IAR-ARM-730\settings\FRSKYD16.Debug.general.xcl" --backend -f "C:\Users\wang_\Documents\GitHub\TINY-TX-X8\FRSKY-D16\IAR-ARM-730\settings\FRSKYD16.Debug.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.3\common\bin\cspybat" -f "C:\Users\wang_\Documents\GitHub\TINY-TX-X8\FRSKY-D8\IAR-STM8-210\settings\FRSKYD8.Debug.general.xcl" --backend -f "C:\Users\wang_\Documents\GitHub\TINY-TX-X8\FRSKY-D8\IAR-STM8-210\settings\FRSKYD8.Debug.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.3\common\bin\cspybat" -f "C:\Users\wang_\Documents\GitHub\TINY-TX-X8\FRSKY-D16\IAR-ARM-730\settings\FRSKYD16.Debug.general.xcl" "--debug_file=%~1" --backend -f "C:\Users\wang_\Documents\GitHub\TINY-TX-X8\FRSKY-D16\IAR-ARM-730\settings\FRSKYD16.Debug.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.3\common\bin\cspybat" -f "C:\Users\wang_\Documents\GitHub\TINY-TX-X8\FRSKY-D8\IAR-STM8-210\settings\FRSKYD8.Debug.general.xcl" "--debug_file=%~1" --backend -f "C:\Users\wang_\Documents\GitHub\TINY-TX-X8\FRSKY-D8\IAR-STM8-210\settings\FRSKYD8.Debug.driver.xcl" 
 
 @echo off 
 :end

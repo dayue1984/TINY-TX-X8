@@ -1,38 +1,35 @@
 /*==============================================================================
-°´¼ü°üÀ¨ : 
-(1) 4*2Î¢µ÷°´¼ü(ËÄ¸öÒ¡¸Ë·Ö±ğÓĞÁ½¸öÎ¢µ÷°´¼ü : ¼Ó/¼õ   °´¼ü×´Ì¬°üÀ¨ : ¶Ì°´£¬Á¬·¢)
-(2) CH5(ÉÏ/ÏÂ) CH6(ÉÏ/ÏÂ)
-(3) BIND(¶ÔÂë)   Auto(ºÍ CH6Down ÅäºÏ ÖĞÎ»Ğ£×¼)
-(4) 8¸ö²¦Âë¿ª¹Ø
+æŒ‰é”®åŒ…æ‹¬ : 
+(1) 4*2å¾®è°ƒæŒ‰é”®(å››ä¸ªæ‘‡æ†åˆ†åˆ«æœ‰ä¸¤ä¸ªå¾®è°ƒæŒ‰é”® : åŠ /å‡   æŒ‰é”®çŠ¶æ€åŒ…æ‹¬ : çŸ­æŒ‰ï¼Œè¿å‘)
+(2) CH5(ä¸Š/ä¸‹) CH6(ä¸Š/ä¸‹)
+(3) BIND(å¯¹ç )   Auto(å’Œ CH6Down é…åˆ ä¸­ä½æ ¡å‡†)
+(4) 8ä¸ªæ‹¨ç å¼€å…³
 ==============================================================================*/
 #include "include.h"
 
-//20180801£ºÍ¨µÀÇĞ»»°´¼ü : ¶Ì°´ / ³¤°´£¬¸ù¾İdip78×´Ì¬£¬ÅĞ¶ÏÊÇ·ñ³¤°´£¬AUX12(CH56)¡¢AUX34(CH78)·ÖÎªÁ½×é
+//20180801ï¼šé€šé“åˆ‡æ¢æŒ‰é”® : çŸ­æŒ‰ / é•¿æŒ‰ï¼Œæ ¹æ®dip78çŠ¶æ€ï¼Œåˆ¤æ–­æ˜¯å¦é•¿æŒ‰ï¼ŒAUX12(CH56)ã€AUX34(CH78)åˆ†ä¸ºä¸¤ç»„
 volatile ChannelKeyTypeDef ChannelKeyValue 	= __stEmpty_Key; 
 
-//Î¢µ÷°´¼ü : ¶Ì°´ / Á¬·¢
-//¶Ì°´ÅĞ¶¨ : down(20mS) -> up(20mS)
-//Á¬·¢ÅĞ¶¨ : down(1S)   -> down(50mS ´¥·¢Ò»´Î°´¼ü) -> up(20mS)
+//å¾®è°ƒæŒ‰é”® : çŸ­æŒ‰ / è¿å‘
+//çŸ­æŒ‰åˆ¤å®š : down(20mS) -> up(20mS)
+//è¿å‘åˆ¤å®š : down(1S)   -> down(50mS è§¦å‘ä¸€æ¬¡æŒ‰é”®) -> up(20mS)
 volatile OffSetKeyTypeDef  OffSetKeyValue  	 = __stOffset_EmptyKey ; 
 // [x][0] : downcnt        [x][1] : upcnt
-static uint8_t ChannelkeyTemp[5][3] = 
+static uint8_t ChannelkeyTemp[5][2] = 
 {
-  	{ 0 , 0 } , //ÎªÁËÓë°´¼üË³Ğò¶ÔÆë
-	
-	//20180801£ºCH5-8
-        // [x][0] : downcnt 
-        // [x][1] : continumcnt
-        // [x][2] : upcnt
+  	{ 0 , 0 } , //ä¸ºäº†ä¸æŒ‰é”®é¡ºåºå¯¹é½
 	{ 0 , 0 } , 
 	{ 0 , 0 } , 
 	{ 0 , 0 } , 
 	{ 0 , 0 } , 
 };
 
-
+// [x][0] : downcnt 
+// [x][1] : continumcnt
+// [x][2] : upcnt
 static uint8_t OffSetKeyTemp[9][3] = 
 {
-  	{ 0 , 0 , 0} , //ÎªÁËÓë°´¼üË³Ğò¶ÔÆë
+  	{ 0 , 0 , 0} , //ä¸ºäº†ä¸æŒ‰é”®é¡ºåºå¯¹é½
 	
   	//R_Plus
   	{ 0 , 0 , 0} ,
@@ -58,7 +55,7 @@ static uint8_t OffSetKeyTemp[9][3] =
 
 void key_int(void)
 {
-	//14¸ö°´¼ü(8¸öÎ¢µ÷°´¼ü + 4¸ö Í¨µÀ°´¼ü + Bind + Auto)
+	//14ä¸ªæŒ‰é”®(8ä¸ªå¾®è°ƒæŒ‰é”® + 4ä¸ª é€šé“æŒ‰é”® + Bind + Auto)
  	//CH5_UP + CH5_DOWN + TRIM_R_UP + TRIM_R_DOWN 
 	GPIOC -> CR1 |=  (1<<7)|(1<<6)|(1<<5)|(1<<4)  ; 			
 	GPIOC -> CR2 &= ~((1<<7)|(1<<6)|(1<<5)|(1<<4)) ; 
@@ -75,7 +72,7 @@ void key_int(void)
 	GPIOE -> DDR &= ~((1<<7)|(1<<6)|(1<<5)|(1<<4)|(1<<3)|(1<<2)|(1<<1)|(1<<0)) ;
 	
 	
-	//8¸ö ²¦Âë¿ª¹Ø(ÉÏÀ­ÊäÈë) : Ç°6¸ö²¦Âë¿ª¹Ø¶ÔÓ¦Ç°6Í¨µÄ·´Ïò £¬ ºóÁ½¸öÎª CH7 / CH8¿ª¹ØÍ¨µÀ
+	//8ä¸ª æ‹¨ç å¼€å…³(ä¸Šæ‹‰è¾“å…¥) : å‰6ä¸ªæ‹¨ç å¼€å…³å¯¹åº”å‰6é€šçš„åå‘ ï¼Œ åä¸¤ä¸ªä¸º CH7 / CH8å¼€å…³é€šé“
 	//INV_CH7 + INV_CH8 
   	GPIOG -> CR1 |=  (1<<3)|(1<<2)  ; 
 	GPIOG -> CR2 &= ~((1<<3)|(1<<2)) ; 
@@ -91,7 +88,7 @@ void key_int(void)
 	GPIOA -> CR2 &= ~((1<<7)|(1<<6)|(1<<5)|(1<<4)) ; 
 	GPIOA -> DDR &= ~((1<<7)|(1<<6)|(1<<5)|(1<<4)) ; 
 	
-	//1¸ö ÃÀ¹úÊÖ/ÈÕ±¾ÊÖ Ñ¡Ôñº¸µã   ¸¡¿Õ(PC0¿ªÂ©£¬ÎŞÉÏÀ­£¬ËùÒÔÉèÖÃ³É¸¡¿ÕÊäÈë£¬×¢ÒâPCBÉÏÔö¼ÓÉÏÀ­µç×è)
+	//1ä¸ª ç¾å›½æ‰‹/æ—¥æœ¬æ‰‹ é€‰æ‹©ç„Šç‚¹   æµ®ç©º(PC0å¼€æ¼ï¼Œæ— ä¸Šæ‹‰ï¼Œæ‰€ä»¥è®¾ç½®æˆæµ®ç©ºè¾“å…¥ï¼Œæ³¨æ„PCBä¸Šå¢åŠ ä¸Šæ‹‰ç”µé˜»)
   	GPIOC -> CR1 &= ~(1<<0) ; 
 	GPIOC -> CR2 &= ~(1<<0) ; 
 	GPIOC -> DDR &= ~(1<<0) ;
@@ -99,52 +96,53 @@ void key_int(void)
 
 
 static void ChannelKey_Scan(GPIO_TypeDef* GPIOx , uint8_t GPIO_Pin , ChannelKeyTypeDef KeyNum)
-{            
-        
-        //°´¼ü°´ÏÂ
+{       
+        //æŒ‰é”®æŒ‰ä¸‹
 	if(!(GPIOx -> IDR & (uint8_t)GPIO_Pin))
 	{
-                bool LongClick_flg = (bool)(((KeyNum < __stKey_CH7) && (GPIOG -> IDR & (1<<2)==1))||((KeyNum > __stKey_CH6) && (GPIOG -> IDR & (1<<3)==1)));
-         
-	  	ChannelkeyTemp[KeyNum][2] = 0;
+                bool LongClick_flg = false;
+                if((bool)(KeyNum < __stKey_CH7))
+                {
+                  if(GPIOG -> IDR & (1<<2)==1) LongClick_flg = true;
+                }
+                else if((bool)(KeyNum > __stKey_CH6))
+                {
+                  if(GPIOG -> IDR & (1<<3)==1) LongClick_flg = true;
+                }
+       
 		if(ChannelkeyTemp[KeyNum][0] < 50) 
 		{
 			++ChannelkeyTemp[KeyNum][0];
 			ChannelkeyTemp[KeyNum][1] = 0 ; 
 			
-			//´¥·¢¶Ì°´
+			//è§¦å‘çŸ­æŒ‰
                         if(ChannelkeyTemp[KeyNum][0] == 5 && !LongClick_flg) ChannelKeyValue = KeyNum ; 
 		}
 		else
                 {
-		  	//´¥·¢³¤°´
-		 	if(ChannelkeyTemp[KeyNum][1] = 15 && LongClick_flg) 
+		  	//è§¦å‘é•¿æŒ‰
+		 	if(ChannelkeyTemp[KeyNum][1] < 50)  
                         {
-                          //ChannelkeyTemp[KeyNum][1] = 0 ;   
-                          ChannelKeyValue = KeyNum ;
-                          
-                        }
-			else
-			{
-                          ++ChannelkeyTemp[KeyNum][1];	
+                          ++ChannelkeyTemp[KeyNum][1];
 			} 
+                        else if(ChannelkeyTemp[KeyNum][1] = 50 && LongClick_flg)
+                        {
+                          //ChannelkeyTemp[KeyNum][1] = 0 ;   //æŒ‰é”®è¿å‡»
+                          ChannelKeyValue = KeyNum ;	
+                        }
 		}
 		 
 	}
-	else
-	{	//°´¼üËÉ¿ª 50mS
-		if(ChannelkeyTemp[KeyNum][2] < 5) ++ChannelkeyTemp[KeyNum][2];
-		else
-		{
-			ChannelkeyTemp[KeyNum][0] = 0 ;
-		}
-	}    
+        else
+        {
+           ChannelkeyTemp[KeyNum][0] = 0;
+        }
         
 }
 
 static void OffSetKey_Scan(GPIO_TypeDef* GPIOx , uint8_t GPIO_Pin , OffSetKeyTypeDef KeyNum)
 {
-  	//°´¼ü°´ÏÂ
+  	//æŒ‰é”®æŒ‰ä¸‹
 	if(!(GPIOx -> IDR & (uint8_t)GPIO_Pin))
 	{
 	  	OffSetKeyTemp[KeyNum][2] = 0;
@@ -153,7 +151,7 @@ static void OffSetKey_Scan(GPIO_TypeDef* GPIOx , uint8_t GPIO_Pin , OffSetKeyTyp
 			++OffSetKeyTemp[KeyNum][0];
 			OffSetKeyTemp[KeyNum][1] = 0 ; 
 			
-			//´¥·¢¶Ì°´
+			//è§¦å‘çŸ­æŒ‰
 			if(OffSetKeyTemp[KeyNum][0] == 5) 
 			{
 				OffSetKeyValue = KeyNum ; 
@@ -161,7 +159,7 @@ static void OffSetKey_Scan(GPIO_TypeDef* GPIOx , uint8_t GPIO_Pin , OffSetKeyTyp
 		}
 		else
 		{
-		  	//´¥·¢°´¼üÁ¬·¢
+		  	//è§¦å‘æŒ‰é”®è¿å‘
 		 	if(OffSetKeyTemp[KeyNum][1] < 15) ++OffSetKeyTemp[KeyNum][1];	
 			else  
 			{
@@ -172,7 +170,7 @@ static void OffSetKey_Scan(GPIO_TypeDef* GPIOx , uint8_t GPIO_Pin , OffSetKeyTyp
 		 
 	}
 	else
-	{	//°´¼üËÉ¿ª 50mS
+	{	//æŒ‰é”®æ¾å¼€ 50mS
 		if(OffSetKeyTemp[KeyNum][2] < 5) ++OffSetKeyTemp[KeyNum][2];
 		else
 		{
@@ -192,9 +190,9 @@ void key_Scan(void)
         //CH8
 	ChannelKey_Scan(GPIOE , GPIO_Pin_4 , __stKey_CH8) ;
 	
-	//8¸öÎ¢µ÷°´¼ü
+	//8ä¸ªå¾®è°ƒæŒ‰é”®
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//!!!!!!!!! ×¢Òâ : ÃÀ¹úÊÖ ºÍ ÈÕ±¾ÊÖ Î¢µ÷ °´¼ü»¥»» !!!!!!!!!!!!!!!!!!!!!!
+	//!!!!!!!!! æ³¨æ„ : ç¾å›½æ‰‹ å’Œ æ—¥æœ¬æ‰‹ å¾®è°ƒ æŒ‰é”®äº’æ¢ !!!!!!!!!!!!!!!!!!!!!!
 	if(RFHabit == __AmericaPlayer)
 	{
 		OffSetKey_Scan(GPIOC , GPIO_Pin_7 , __stKey_T_Plus) ; 
@@ -221,7 +219,7 @@ void key_Scan(void)
 	
 
 	
-	//! ×ó±ßÎ¢µ÷°´¼üÍ¬Ò»Ê±¿ÌÖ»ÄÜ´¥·¢Ò»´Î£¬ÓÒ±ßÎ¢µ÷°´¼üÍ¬Ò»Ê±¿ÌÖ»ÄÜ´¥·¢Ò»´Î
+	//! å·¦è¾¹å¾®è°ƒæŒ‰é”®åŒä¸€æ—¶åˆ»åªèƒ½è§¦å‘ä¸€æ¬¡ï¼Œå³è¾¹å¾®è°ƒæŒ‰é”®åŒä¸€æ—¶åˆ»åªèƒ½è§¦å‘ä¸€æ¬¡
 	//!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	/*uint8_t LefOffSetKey_Temp = 0xFF ;   uint8_t RightOffSetKey_Temp = 0xFF ; 
 	static uint8_t LefOffSetKey_LastTemp   = 0xFF ; 
@@ -239,7 +237,7 @@ void key_Scan(void)
 	if(!(GPIOE -> IDR & (1<<1))) RightOffSetKey_Temp &= 0xF7 ; 
 	if(!(GPIOE -> IDR & (1<<6))) RightOffSetKey_Temp &= 0xEF ; 
 	
-        #warning  È·ÈÏÎ¢µ÷°´¼üÊÇ·ñÕıÈ·
+        #warning  ç¡®è®¤å¾®è°ƒæŒ‰é”®æ˜¯å¦æ­£ç¡®
 	if(LefOffSetKey_LastTemp == LefOffSetKey_Temp)
 	{
 	  	if(OffSetKeyTemp[0][0] < 50) 
@@ -248,38 +246,38 @@ void key_Scan(void)
 			OffSetKeyTemp[0][1] = 0 ; 
 			if(OffSetKeyTemp[0][0] == 5) 
 			{
-			  	if(LefOffSetKey_Temp == 0xFE) 		OffSetKeyValue = __stKey_R_Plus ;//×ó±ßÎåÎ¬°´¼ü : ÉÏ
-				else if(LefOffSetKey_Temp == 0xFD) 	OffSetKeyValue = __stKey_R_Sub ; //×ó±ßÎåÎ¬°´¼ü : ÉÏ
+			  	if(LefOffSetKey_Temp == 0xFE) 		OffSetKeyValue = __stKey_R_Plus ;//å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
+				else if(LefOffSetKey_Temp == 0xFD) 	OffSetKeyValue = __stKey_R_Sub ; //å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
 				else if(LefOffSetKey_Temp == 0xFB) 	
 				{
-					if(RFHabit == __AmericaPlayer)	OffSetKeyValue = __stKey_T_Plus ; //×ó±ßÎåÎ¬°´¼ü : ÉÏ
-					else				OffSetKeyValue = __stKey_E_Plus ;  //×ó±ßÎåÎ¬°´¼ü : ÉÏ
+					if(RFHabit == __AmericaPlayer)	OffSetKeyValue = __stKey_T_Plus ; //å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
+					else				OffSetKeyValue = __stKey_E_Plus ;  //å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
 				}
 				else if(LefOffSetKey_Temp == 0xF7) 	
 				{
-					if(RFHabit == __AmericaPlayer)	OffSetKeyValue = __stKey_T_Sub ; //×ó±ßÎåÎ¬°´¼ü : ÉÏ
-					else				OffSetKeyValue = __stKey_E_Sub ;  //×ó±ßÎåÎ¬°´¼ü : ÉÏ
+					if(RFHabit == __AmericaPlayer)	OffSetKeyValue = __stKey_T_Sub ; //å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
+					else				OffSetKeyValue = __stKey_E_Sub ;  //å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
 				}
 			}
 		}
 		else
 		{
-		  	//´¥·¢°´¼üÁ¬·¢
+		  	//è§¦å‘æŒ‰é”®è¿å‘
 		 	if(OffSetKeyTemp[0][1] < 15) ++OffSetKeyTemp[0][1];	
 			else  
 			{
 			  	OffSetKeyTemp[0][1] = 0 ; 
-			  	if(LefOffSetKey_Temp == 0xFE) 		OffSetKeyValue = __stKey_R_Plus ;//×ó±ßÎåÎ¬°´¼ü : ÉÏ
-				else if(LefOffSetKey_Temp == 0xFD) 	OffSetKeyValue = __stKey_R_Sub ; //×ó±ßÎåÎ¬°´¼ü : ÉÏ
+			  	if(LefOffSetKey_Temp == 0xFE) 		OffSetKeyValue = __stKey_R_Plus ;//å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
+				else if(LefOffSetKey_Temp == 0xFD) 	OffSetKeyValue = __stKey_R_Sub ; //å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
 				else if(LefOffSetKey_Temp == 0xFB) 	
 				{
-					if(RFHabit == __AmericaPlayer)	OffSetKeyValue = __stKey_T_Plus ; //×ó±ßÎåÎ¬°´¼ü : ÉÏ
-					else				OffSetKeyValue = __stKey_E_Plus ;  //×ó±ßÎåÎ¬°´¼ü : ÉÏ
+					if(RFHabit == __AmericaPlayer)	OffSetKeyValue = __stKey_T_Plus ; //å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
+					else				OffSetKeyValue = __stKey_E_Plus ;  //å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
 				}
 				else if(LefOffSetKey_Temp == 0xF7) 	
 				{
-					if(RFHabit == __AmericaPlayer)	OffSetKeyValue = __stKey_T_Sub ; //×ó±ßÎåÎ¬°´¼ü : ÉÏ
-					else				OffSetKeyValue = __stKey_E_Sub ;  //×ó±ßÎåÎ¬°´¼ü : ÉÏ
+					if(RFHabit == __AmericaPlayer)	OffSetKeyValue = __stKey_T_Sub ; //å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
+					else				OffSetKeyValue = __stKey_E_Sub ;  //å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
 				}
 			} 
 		}
@@ -300,38 +298,38 @@ void key_Scan(void)
 			OffSetKeyTemp[1][1] = 0 ; 
 			if(OffSetKeyTemp[1][0] == 5) 
 			{
-			  	if(RightOffSetKey_Temp == 0xFE) 	OffSetKeyValue = __stKey_A_Plus ;//×ó±ßÎåÎ¬°´¼ü : ÉÏ
-				else if(RightOffSetKey_Temp == 0xFD) 	OffSetKeyValue = __stKey_A_Sub ; //×ó±ßÎåÎ¬°´¼ü : ÉÏ
+			  	if(RightOffSetKey_Temp == 0xFE) 	OffSetKeyValue = __stKey_A_Plus ;//å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
+				else if(RightOffSetKey_Temp == 0xFD) 	OffSetKeyValue = __stKey_A_Sub ; //å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
 				else if(RightOffSetKey_Temp == 0xFB) 	
 				{
-					if(RFHabit == __AmericaPlayer)	OffSetKeyValue = __stKey_E_Plus ; //×ó±ßÎåÎ¬°´¼ü : ÉÏ
-					else				OffSetKeyValue = __stKey_T_Plus ;  //×ó±ßÎåÎ¬°´¼ü : ÉÏ
+					if(RFHabit == __AmericaPlayer)	OffSetKeyValue = __stKey_E_Plus ; //å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
+					else				OffSetKeyValue = __stKey_T_Plus ;  //å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
 				}
 				else if(RightOffSetKey_Temp == 0xF7) 	
 				{
-					if(RFHabit == __AmericaPlayer)	OffSetKeyValue = __stKey_E_Sub ; //×ó±ßÎåÎ¬°´¼ü : ÉÏ
-					else				OffSetKeyValue = __stKey_T_Sub ;  //×ó±ßÎåÎ¬°´¼ü : ÉÏ
+					if(RFHabit == __AmericaPlayer)	OffSetKeyValue = __stKey_E_Sub ; //å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
+					else				OffSetKeyValue = __stKey_T_Sub ;  //å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
 				}
 			}
 		}
 		else
 		{
-		  	//´¥·¢°´¼üÁ¬·¢
+		  	//è§¦å‘æŒ‰é”®è¿å‘
 		 	if(OffSetKeyTemp[1][1] < 15) ++OffSetKeyTemp[1][1];	
 			else  
 			{
 			  	OffSetKeyTemp[1][1] = 0 ; 
-			  	if(RightOffSetKey_Temp == 0xFE) 	OffSetKeyValue = __stKey_A_Plus ;//×ó±ßÎåÎ¬°´¼ü : ÉÏ
-				else if(RightOffSetKey_Temp == 0xFD) 	OffSetKeyValue = __stKey_A_Sub ; //×ó±ßÎåÎ¬°´¼ü : ÉÏ
+			  	if(RightOffSetKey_Temp == 0xFE) 	OffSetKeyValue = __stKey_A_Plus ;//å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
+				else if(RightOffSetKey_Temp == 0xFD) 	OffSetKeyValue = __stKey_A_Sub ; //å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
 				else if(RightOffSetKey_Temp == 0xFB) 	
 				{
-					if(RFHabit == __AmericaPlayer)	OffSetKeyValue = __stKey_E_Plus ; //×ó±ßÎåÎ¬°´¼ü : ÉÏ
-					else				OffSetKeyValue = __stKey_T_Plus ;  //×ó±ßÎåÎ¬°´¼ü : ÉÏ
+					if(RFHabit == __AmericaPlayer)	OffSetKeyValue = __stKey_E_Plus ; //å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
+					else				OffSetKeyValue = __stKey_T_Plus ;  //å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
 				}
 				else if(RightOffSetKey_Temp == 0xF7) 	
 				{
-					if(RFHabit == __AmericaPlayer)	OffSetKeyValue = __stKey_E_Sub ; //×ó±ßÎåÎ¬°´¼ü : ÉÏ
-					else				OffSetKeyValue = __stKey_T_Sub ;  //×ó±ßÎåÎ¬°´¼ü : ÉÏ
+					if(RFHabit == __AmericaPlayer)	OffSetKeyValue = __stKey_E_Sub ; //å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
+					else				OffSetKeyValue = __stKey_T_Sub ;  //å·¦è¾¹äº”ç»´æŒ‰é”® : ä¸Š
 				}
 			} 
 		}
@@ -350,7 +348,7 @@ void InversionKey_Scan(void)
 	static uint8_t  InversionKey_LastTemp = 0 ; 
 	static  uint8_t InversionKeySame_cnt  = 0 ; 
 	
-	//6¸ö·´Ïò²¦Âë¿ª¹Ø
+	//6ä¸ªåå‘æ‹¨ç å¼€å…³
   	InversionKey_Temp  = (GPIOA -> IDR & 0xF0) ;
 	InversionKey_Temp |= (GPIOG -> IDR & 0x0C) ;
 	InversionKey_Temp |= (GPIOF -> IDR & 0x03) ;
@@ -361,7 +359,7 @@ void InversionKey_Scan(void)
 		else 
 		{
 		  	//======================================================
-		  	//¼ÇÂ¼µ±Ç° ·´Ïò¿ª¹Ø¡£ Æô¶¯ºó£¬¸Ä±ä·´Ïò¿ª¹ØÎŞĞ§£¬Ö±µ½ÏÂ´ÎÉÏµç¡£
+		  	//è®°å½•å½“å‰ åå‘å¼€å…³ã€‚ å¯åŠ¨åï¼Œæ”¹å˜åå‘å¼€å…³æ— æ•ˆï¼Œç›´åˆ°ä¸‹æ¬¡ä¸Šç”µã€‚
 		  	//======================================================
 		  	ChannelInversion_flg = 0x3F ; 
 		  	if(InversionKey_Temp & 0x80) ChannelInversion_flg &= 0xFE ;	//RUDDER
@@ -369,8 +367,8 @@ void InversionKey_Scan(void)
 			if(InversionKey_Temp & 0x40) ChannelInversion_flg &= 0xFB ;	//ELEVATOR
 			if(InversionKey_Temp & 0x20) ChannelInversion_flg &= 0xF7 ;	//AILERON
 			
-			if(InversionKey_Temp & 0x01) ChannelInversion_flg &= 0xAF ;	//AUX1¡¢3
-			if(InversionKey_Temp & 0x02) ChannelInversion_flg &= 0x5F ;	//AUX2¡¢4
+			if(InversionKey_Temp & 0x01) ChannelInversion_flg &= 0xAF ;	//AUX1ã€3
+			if(InversionKey_Temp & 0x02) ChannelInversion_flg &= 0x5F ;	//AUX2ã€4
 			
 		}
 	}
@@ -381,9 +379,9 @@ void InversionKey_Scan(void)
 	}
 	
 	
-	//!!!!!!!!!!!!!!!!!!!!! ×¢Òâ !!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//!!Èç¹ûÈÕ±¾ÊÖº¸µã¶Ì½Ó , ÔòÊÇÈÕ±¾ÊÖ¡£·´Ö®ÊÇÃÀ¹úÊÖ!!!!!!!
-	//!!ÃÀ¹úÊÖ ºÍ ÈÕ±¾ÊÖ ÖĞÎ»±ê¼Ç   Î¢µ÷°´¼üĞèÒªÕûÌåÓ³Éä!!!!
+	//!!!!!!!!!!!!!!!!!!!!! æ³¨æ„ !!!!!!!!!!!!!!!!!!!!!!!!!!!
+	//!!å¦‚æœæ—¥æœ¬æ‰‹ç„Šç‚¹çŸ­æ¥ , åˆ™æ˜¯æ—¥æœ¬æ‰‹ã€‚åä¹‹æ˜¯ç¾å›½æ‰‹!!!!!!!
+	//!!ç¾å›½æ‰‹ å’Œ æ—¥æœ¬æ‰‹ ä¸­ä½æ ‡è®°   å¾®è°ƒæŒ‰é”®éœ€è¦æ•´ä½“æ˜ å°„!!!!
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	uint8_t RFHabit_flg = (GPIOC -> IDR & (1<<0)) ;
 	static uint8_t RFHabit_Lastflg = 0 ; 

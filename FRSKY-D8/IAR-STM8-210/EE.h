@@ -1,10 +1,10 @@
 #ifndef __ee_H_
 #define __ee_H_
 
-//极值校准标志位
+//鏋佸�兼牎鍑嗘爣蹇椾綅
 #define IS_EVER_MIDCALIBRATION_FLG	0x55
 
-//校准数据存放位置
+//鏍″噯鏁版嵁瀛樻斁浣嶇疆
 #define IS_EVER_MIDCALIBRATION_ADDR 	0x00
 
 #define RUD_MAXVALUE_ADDR	        0x02

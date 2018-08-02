@@ -377,7 +377,7 @@ void StaticOverTime(void)
 	//保存上次摇杆AD采样值，和当前AD比对，如果变化大于40/60，更新(清零静止计时)。否则不变
   	static uint16_t Sampling_HSK_AD_LastValue[5] ; 
 	//20180801：AUX3、4 状态通过EE存储
-        //static uint8_t  AUX3AUX4_LastState = 0 ; 
+        static uint8_t  DIP78_LastState = 0 ; 
 	//静止超时计数
 	static uint16_t StaticOverTime_Secondcnt = 0 ; 
 	static uint8_t  StaticOverTime_Mincnt	 = 0 ;
@@ -419,12 +419,12 @@ void StaticOverTime(void)
 		StaticOverTime_Secondcnt = 0 ; StaticOverTime_Mincnt = 0 ;
 	}
 	
-	//判断是否改变了 AUX3 AUX4的拨码位置
-	//if(AUX3AUX4_LastState != (GPIOG -> IDR & ((1<<2)|(1<<3))))
-	//{
-	//  	StaticOverTime_Secondcnt = 0 ; StaticOverTime_Mincnt = 0 ;
-	//	AUX3AUX4_LastState = (GPIOG -> IDR & ((1<<2)|(1<<3))) ; 
-	//}
+	//判断是否改变了拨码78位置
+	if(DIP78_LastState != (GPIOG -> IDR & ((1<<2)|(1<<3))))
+	{
+	  	StaticOverTime_Secondcnt = 0 ; StaticOverTime_Mincnt = 0 ;
+		DIP78_LastState = (GPIOG -> IDR & ((1<<2)|(1<<3))) ; 
+	}
 	
 	//遥控器静止超过 OVERTIME_MAX 遥控器报警
 	if(StaticOverTime_Mincnt >= OVERTIME_MAX)

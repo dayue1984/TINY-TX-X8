@@ -1,7 +1,7 @@
 #ifndef _LED_H_
 #define _LED_H_
 
-//����LED��ʾʱҪע�� : ��������Դָʾ��(��Դָʾ��ֻ�ɵ�Դ������������)
+//开关LED显示时要注意 : 不包括电源指示灯(电源指示灯只由电源测量函数控制)
 #define LED_NONE	0x01	 
 #define LED_ALL		0xFE   
 

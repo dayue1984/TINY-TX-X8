@@ -1,10 +1,10 @@
 /*******************************************************************************
 --------------------------------------------------------------------------------
-ADCÍ¨µÀ¶ÔÓ¦¹¦ÄÜ : 
+ADCé€šé“å¯¹åº”åŠŸèƒ½ : 
 ADC11(PB7) -> Random          ADC13(PB5) -> RUD          ADC14(PB4) -> THR(ELE)
 ADC15(PB3) -> ELE(THR)        ADC16(PB2) -> AIL          ADC17(PB1) -> BAT
 ADC18(PB0) -> REF             
-ÄÚ²¿²Î¿¼µç
+å†…éƒ¨å‚è€ƒç”µ
 --------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------
@@ -14,73 +14,73 @@ ADC18(PB0) -> REF
 #define  ADC1_DR_Address                    (ADC1_BASE + 0x04)
 #define  ADC1_Buffer_Size                    8
 
-uint16_t ADC_Value[30] ;							//ADC DMA ÄÚ´æ»º´æÇø		
-bool     ISCJ431OKFlg = true ; 							//431 ×´Ì¬±êÖ¾Î»(1: Õı³£   0: Òì³£)
-float    VoltValue = 0.0f ;							//µç³ØµçÑ¹
+uint16_t ADC_Value[30] ;							//ADC DMA å†…å­˜ç¼“å­˜åŒº		
+bool     ISCJ431OKFlg = true ; 							//431 çŠ¶æ€æ ‡å¿—ä½(1: æ­£å¸¸   0: å¼‚å¸¸)
+float    VoltValue = 0.0f ;							//ç”µæ± ç”µå‹
 
 
 //==============================================================================
-//ÖØÖÃ ADC
-//(1)Èç¹ûADCÒç³ö(ADCÖµ¿ÉÄÜÒÑ¾­´íÎ»)£¬ÖØĞÂ³õÊ¼»¯ DMA ADC¡£
-//(2)Ê¹ÄÜµ¥´ÎADC×ª»»¡£
+//é‡ç½® ADC
+//(1)å¦‚æœADCæº¢å‡º(ADCå€¼å¯èƒ½å·²ç»é”™ä½)ï¼Œé‡æ–°åˆå§‹åŒ– DMA ADCã€‚
+//(2)ä½¿èƒ½å•æ¬¡ADCè½¬æ¢ã€‚
 //==============================================================================
 void StartupAgain_ADC(void)
 {
-  	//ÅĞ¶ÏADCÊÇ·ñÓĞÒç³ö
+  	//åˆ¤æ–­ADCæ˜¯å¦æœ‰æº¢å‡º
 	if(ADC1 -> SR & (1<<2))
 	{
-		ADC1 -> SR &= ~(1<<2) ; 					//ÇåÁãÒç³ö±êÖ¾Î»
+		ADC1 -> SR &= ~(1<<2) ; 					//æ¸…é›¶æº¢å‡ºæ ‡å¿—ä½
 		
-		//ÖØÖÃ ADC  DMA 
-		ADC1 -> CR1 &= ~(1<<1) ; 					//ÏÈ¹Ø±ÕADC
-		ADC_DMACmd(ADC1,DISABLE); 					//½ûÖ¹ ADC DMAÇëÇó
+		//é‡ç½® ADC  DMA 
+		ADC1 -> CR1 &= ~(1<<1) ; 					//å…ˆå…³é—­ADC
+		ADC_DMACmd(ADC1,DISABLE); 					//ç¦æ­¢ ADC DMAè¯·æ±‚
 		DMA_DeInit(DMA1_Channel0);
-		DMA_Init( DMA1_Channel0 , (uint32_t)ADC_Value,			//DMAÄÚ´æµØÖ·
-                                  ADC1_DR_Address,				//DMA ADCÍâÉèµØÖ·
-				  ADC1_Buffer_Size,				//´«ÊäÊı¾İ¸öÊı : 8
-				  DMA_DIR_PeripheralToMemory,			//´«Êä·½Ïò : ÍâÉè -> ÄÚ´æ
-				  DMA_Mode_Circular,				//DMAÄ£Ê½ : Á¬Ğø´«Êä
-                                  DMA_MemoryIncMode_Inc,			//ÄÚ´æµØÖ·ÀÛ¼Ó
-				  DMA_Priority_High,				//DMAÓÅÏÈ¼¶ : ¸ß
-				  DMA_MemoryDataSize_HalfWord );		//´«ÊäÊı¾İ³ß´ç : 16 bit
+		DMA_Init( DMA1_Channel0 , (uint32_t)ADC_Value,			//DMAå†…å­˜åœ°å€
+                                  ADC1_DR_Address,				//DMA ADCå¤–è®¾åœ°å€
+				  ADC1_Buffer_Size,				//ä¼ è¾“æ•°æ®ä¸ªæ•° : 8
+				  DMA_DIR_PeripheralToMemory,			//ä¼ è¾“æ–¹å‘ : å¤–è®¾ -> å†…å­˜
+				  DMA_Mode_Circular,				//DMAæ¨¡å¼ : è¿ç»­ä¼ è¾“
+                                  DMA_MemoryIncMode_Inc,			//å†…å­˜åœ°å€ç´¯åŠ 
+				  DMA_Priority_High,				//DMAä¼˜å…ˆçº§ : é«˜
+				  DMA_MemoryDataSize_HalfWord );		//ä¼ è¾“æ•°æ®å°ºå¯¸ : 16 bit
 		DMA_Cmd(DMA1_Channel0,ENABLE);
 		
-		ADC_DMACmd(ADC1,ENABLE);	//Ê¹ÄÜADC  DMA
+		ADC_DMACmd(ADC1,ENABLE);	//ä½¿èƒ½ADC  DMA
 	}
-	//Ê¹ÄÜµ¥´ÎADC ×ª»» 
+	//ä½¿èƒ½å•æ¬¡ADC è½¬æ¢ 
 	ADC1 -> CR1 |= (1<<1) ;
 }
 
 //==============================================================================
-//³õÊ¼»¯ ADC  DMA_CH0
+//åˆå§‹åŒ– ADC  DMA_CH0
 //==============================================================================
 void adc_Init(void)
 {
-	//³õÊ¼»¯GPIO ¸¡¿ÕÊäÈë(¹² 7 Í¨µÀ  ¼ÓÉÏÄÚ²»²Î¿¼µç   ¹²8Í¨µÀ)
+	//åˆå§‹åŒ–GPIO æµ®ç©ºè¾“å…¥(å…± 7 é€šé“  åŠ ä¸Šå†…ä¸å‚è€ƒç”µ   å…±8é€šé“)
   	GPIOB -> CR1 &= ~((1<<7)|(1<<5)|(1<<4)|(1<<3)|(1<<2)|(1<<1)|(1<<0));
 	GPIOB -> CR2 &= ~((1<<7)|(1<<5)|(1<<4)|(1<<3)|(1<<2)|(1<<1)|(1<<0));
 	GPIOB -> DDR &= ~((1<<7)|(1<<5)|(1<<4)|(1<<3)|(1<<2)|(1<<1)|(1<<0));
-	CLK -> PCKENR2 |= (1<<4)|(1<<0); 					//´ò¿ª ADC1  DMA1 Ê±ÖÓ 
+	CLK -> PCKENR2 |= (1<<4)|(1<<0); 					//æ‰“å¼€ ADC1  DMA1 æ—¶é’Ÿ 
 	
-	//³õÊ¼»¯ DMA1_CH0 
+	//åˆå§‹åŒ– DMA1_CH0 
 	DMA_DeInit(DMA1_Channel0);
-	DMA_Init( DMA1_Channel0 , (uint32_t)ADC_Value,				//DMAÄÚ´æµØÖ·
-                                  ADC1_DR_Address,				//DMA ADCÍâÉèµØÖ·
-				  ADC1_Buffer_Size,				//´«ÊäÊı¾İ¸öÊı : 8
-				  DMA_DIR_PeripheralToMemory,			//´«Êä·½Ïò : ÍâÉè -> ÄÚ´æ
-				  DMA_Mode_Circular,				//DMAÄ£Ê½ : Á¬Ğø´«Êä
-                                  DMA_MemoryIncMode_Inc,			//ÄÚ´æµØÖ·ÀÛ¼Ó
-				  DMA_Priority_High,				//DMAÓÅÏÈ¼¶ : ¸ß
-				  DMA_MemoryDataSize_HalfWord );		//´«ÊäÊı¾İ³ß´ç : 16 bit
+	DMA_Init( DMA1_Channel0 , (uint32_t)ADC_Value,				//DMAå†…å­˜åœ°å€
+                                  ADC1_DR_Address,				//DMA ADCå¤–è®¾åœ°å€
+				  ADC1_Buffer_Size,				//ä¼ è¾“æ•°æ®ä¸ªæ•° : 8
+				  DMA_DIR_PeripheralToMemory,			//ä¼ è¾“æ–¹å‘ : å¤–è®¾ -> å†…å­˜
+				  DMA_Mode_Circular,				//DMAæ¨¡å¼ : è¿ç»­ä¼ è¾“
+                                  DMA_MemoryIncMode_Inc,			//å†…å­˜åœ°å€ç´¯åŠ 
+				  DMA_Priority_High,				//DMAä¼˜å…ˆçº§ : é«˜
+				  DMA_MemoryDataSize_HalfWord );		//ä¼ è¾“æ•°æ®å°ºå¯¸ : 16 bit
 	DMA_Cmd(DMA1_Channel0,ENABLE);
 	DMA_GlobalCmd(ENABLE);
 		
-        ADC1 -> CR1 = (1<<0);       						//·Ö±æÂÊ : 12bit  ¹Ø±ÕËùÓĞADCÏà¹ØÖĞ¶Ï  µ¥´Î×ª»»  Ê¹ÄÜADC                              		
-        ADC1 -> CR2 = (1<<2)|(1<<1);						//ÉèÖÃÇ°24Í¨µÀ    ²ÉÑùÂÊ 192ADC Clock cycles
-	ADC1 -> CR3 = (1<<7)|(1<<6);						//ÉèÖÃÄÚ²¿²Î¿¼µã  ²ÉÑùÂÊ 192ADC Clock cycles
+        ADC1 -> CR1 = (1<<0);       						//åˆ†è¾¨ç‡ : 12bit  å…³é—­æ‰€æœ‰ADCç›¸å…³ä¸­æ–­  å•æ¬¡è½¬æ¢  ä½¿èƒ½ADC                              		
+        ADC1 -> CR2 = (1<<2)|(1<<1);						//è®¾ç½®å‰24é€šé“    é‡‡æ ·ç‡ 192ADC Clock cycles
+	ADC1 -> CR3 = (1<<7)|(1<<6);						//è®¾ç½®å†…éƒ¨å‚è€ƒç‚¹  é‡‡æ ·ç‡ 192ADC Clock cycles
 	ADC_VrefintCmd(ENABLE);
 	
-	//¹Ø±ÕÍâ²¿ 7 Í¨µÀ GPIO Ê©ÃÜÌØ´¥·¢Æ÷
+	//å…³é—­å¤–éƒ¨ 7 é€šé“ GPIO æ–½å¯†ç‰¹è§¦å‘å™¨
 	ADC_SchmittTriggerConfig(ADC1, ADC_Channel_11, DISABLE) ; 
 	ADC_SchmittTriggerConfig(ADC1, ADC_Channel_13, DISABLE) ; 
 	ADC_SchmittTriggerConfig(ADC1, ADC_Channel_14, DISABLE) ; 
@@ -89,7 +89,7 @@ void adc_Init(void)
 	ADC_SchmittTriggerConfig(ADC1, ADC_Channel_17, DISABLE) ; 
 	ADC_SchmittTriggerConfig(ADC1, ADC_Channel_18, DISABLE) ; 
 	
-	//Ê¹ÄÜËùÓĞ 8 Í¨µÀ ADC(7¸öÍâ²¿GPIOÍ¨µÀ + 1¸öÄÚ²¿²Î¿¼µçÍ¨µÀ)
+	//ä½¿èƒ½æ‰€æœ‰ 8 é€šé“ ADC(7ä¸ªå¤–éƒ¨GPIOé€šé“ + 1ä¸ªå†…éƒ¨å‚è€ƒç”µé€šé“)
 	ADC_ChannelCmd(ADC1, ADC_Channel_11, ENABLE) ; 
 	ADC_ChannelCmd(ADC1, ADC_Channel_13, ENABLE) ; 
 	ADC_ChannelCmd(ADC1, ADC_Channel_14, ENABLE) ; 
@@ -99,34 +99,34 @@ void adc_Init(void)
 	ADC_ChannelCmd(ADC1, ADC_Channel_18, ENABLE) ; 
 	ADC_ChannelCmd(ADC1, ADC_Channel_Vrefint, ENABLE) ; 
 	
-	SYSCFG -> RMPCR1 = 0x0C ; 						//Ó³Éä DMA1 Channel0 -> ADC1 
+	SYSCFG -> RMPCR1 = 0x0C ; 						//æ˜ å°„ DMA1 Channel0 -> ADC1 
 	ADC_DMACmd(ADC1,ENABLE);
-	ADC1 -> CR1 |= (1<<1) ;							//¿ªÊ¼Ò»´Î ADC  
+	ADC1 -> CR1 |= (1<<1) ;							//å¼€å§‹ä¸€æ¬¡ ADC  
 }
 
 //====================================================================================================================
 // ADC_Value[1]     -> RUD      ADC_Value[2]    -> THR         ADC_Value[3]     -> ELE        ADC_Value[4]     -> AIL      
 // ADC_Value[5]     -> BAT      ADC_Value[6]    -> CJ_431      ADC_Value[7]     -> IR_REF     ADC_Value[0]     -> Random    
-// Îª·ÀÖ¹ADÖµÀ´»ØÌø¶¯ £¬¶ÔËùÓĞ AD Öµ ×öÆ½»¬ÂË²¨
+// ä¸ºé˜²æ­¢ADå€¼æ¥å›è·³åŠ¨ ï¼Œå¯¹æ‰€æœ‰ AD å€¼ åšå¹³æ»‘æ»¤æ³¢
 //====================================================================================================================
 void GetADValue(void)
 {
 	////////////////////////////////////////////////////////////////////////
-	//µ¥Æ¬»úÄÚ²¿²Î¿¼µçADC(ÓÃÓÚÅĞ¶ÏCJ431ÊÇ·ñÕı³££¬ CJ431²»Õı³£Ê±ÓÃÄÚ²¿²Î¿¼µç×ö»ù×¼) 
-	//STM8L052R8ÄÚ²¿»ù×¼µçÑ¹ : 1.224V * (4095/3.3V) ¡Ö 1519
+	//å•ç‰‡æœºå†…éƒ¨å‚è€ƒç”µADC(ç”¨äºåˆ¤æ–­CJ431æ˜¯å¦æ­£å¸¸ï¼Œ CJ431ä¸æ­£å¸¸æ—¶ç”¨å†…éƒ¨å‚è€ƒç”µåšåŸºå‡†) 
+	//STM8L052R8å†…éƒ¨åŸºå‡†ç”µå‹ : 1.224V * (4095/3.3V) â‰ˆ 1519
 	////////////////////////////////////////////////////////////////////////
 	static uint16_t IRV_ADValue  = 1519 ; 				
-	static uint16_t ADJ_ADValue  = 3102 ; 				        //CJ431»ù×¼µçÑ¹  2.5V * (4095/3.3V) 
-	static uint16_t Volt_ADValue = 3309 ; 				        //³õÊ¼»¯µç³ØµçÑ¹ 4.0V * (2/3)* (4095/3.3V)
+	static uint16_t ADJ_ADValue  = 3102 ; 				        //CJ431åŸºå‡†ç”µå‹  2.5V * (4095/3.3V) 
+	static uint16_t Volt_ADValue = 3309 ; 				        //åˆå§‹åŒ–ç”µæ± ç”µå‹ 4.0V * (2/3)* (4095/3.3V)
 		
 	uint16_t TempAD = 0 ; 
 	uint16_t LimitTemp = 0 ; 
 	
-	//¼ÆËãÄÚ²¿²Î¿¼µç(1.224V)
+	//è®¡ç®—å†…éƒ¨å‚è€ƒç”µ(1.224V)
 	TempAD =  ADC_Value[7] ;
 	if(IRV_ADValue > TempAD)  LimitTemp = IRV_ADValue - TempAD ;  
 	else			  LimitTemp = TempAD - IRV_ADValue ;  
-	if(LimitTemp > 30)//±ä»¯³¬¹ıÒ»¶¨·¶Î§£¬Á¢¼´ÏìÓ¦
+	if(LimitTemp > 30)//å˜åŒ–è¶…è¿‡ä¸€å®šèŒƒå›´ï¼Œç«‹å³å“åº”
 	{
 		IRV_ADValue = TempAD ; 
 	}
@@ -136,11 +136,11 @@ void GetADValue(void)
 	}
 	if((IRV_ADValue > 1719) || (IRV_ADValue < 1319)) IRV_ADValue  = 1519 ;
 		
-	//¼ÆËã³öCJ431µÄ±ÈÀıÏµÊı 
+	//è®¡ç®—å‡ºCJ431çš„æ¯”ä¾‹ç³»æ•° 
 	TempAD =  ADC_Value[6] ;
 	if(ADJ_ADValue > TempAD)  LimitTemp = ADJ_ADValue - TempAD ;  
 	else			  LimitTemp = TempAD - ADJ_ADValue ;  
-	if(LimitTemp > 30)//±ä»¯³¬¹ıÒ»¶¨·¶Î§£¬Á¢¼´ÏìÓ¦
+	if(LimitTemp > 30)//å˜åŒ–è¶…è¿‡ä¸€å®šèŒƒå›´ï¼Œç«‹å³å“åº”
 	{
 		ADJ_ADValue = TempAD ; 
 	}
@@ -149,14 +149,14 @@ void GetADValue(void)
 		ADJ_ADValue = (uint16_t)(ADJ_ADValue*0.8f + TempAD *0.2f) ;
 	}
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//ÄÚ²¿²Î¿¼µçÓÃÀ´ÅĞ¶Ï CJ431²Î¿¼µçµÄÓĞĞ§ĞÔ¡£Èç¹ûCJ431ÅĞ¶¨ÎŞĞ§£¬
-	//ÔòÊ¹ÓÃÄÚ²¿²Î¿¼µçÀ´¼ÆËãÆäÓàADÖµ
+	//å†…éƒ¨å‚è€ƒç”µç”¨æ¥åˆ¤æ–­ CJ431å‚è€ƒç”µçš„æœ‰æ•ˆæ€§ã€‚å¦‚æœCJ431åˆ¤å®šæ— æ•ˆï¼Œ
+	//åˆ™ä½¿ç”¨å†…éƒ¨å‚è€ƒç”µæ¥è®¡ç®—å…¶ä½™ADå€¼
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	TempAD = (uint16_t)((1519.0f/IRV_ADValue)*ADJ_ADValue) ; 
-	if(TempAD < 3002)        { ISCJ431OKFlg = false ; ADJ_ADValue = 3102 ;} //ÒòÎª²Î¿¼µçÑ¹ADÖµºóÃæÓÃÓÚ×÷Îª±»³ıÊı(²»ÄÜµÈÓÚÁã,·ñÔò³ÌĞòÅÜ·É)
+	if(TempAD < 3002)        { ISCJ431OKFlg = false ; ADJ_ADValue = 3102 ;} //å› ä¸ºå‚è€ƒç”µå‹ADå€¼åé¢ç”¨äºä½œä¸ºè¢«é™¤æ•°(ä¸èƒ½ç­‰äºé›¶,å¦åˆ™ç¨‹åºè·‘é£)
 	else if(TempAD > 3202)   { ISCJ431OKFlg = false ; ADJ_ADValue = 3102 ;}
 		
-	//¼ÆËãµç³ØµçÑ¹
+	//è®¡ç®—ç”µæ± ç”µå‹
 	TempAD =  ADC_Value[5] ;
 	if(ISCJ431OKFlg == true)TempAD = (uint16_t)(TempAD * ( 3102 / (float)ADJ_ADValue)) ;
 	else			TempAD = (uint16_t)(TempAD * ( 1519 / (float)IRV_ADValue)) ;
@@ -170,9 +170,9 @@ void GetADValue(void)
 	{
 		Volt_ADValue = (uint16_t)(Volt_ADValue * 0.8f + TempAD * 0.2f) ; 	
 	}
-	VoltValue =  (float)Volt_ADValue/Input_Max *3.3f* 1.51f ;		//5.1K + 10K·ÖÑ¹(ï®µç³ØµçÑ¹)
+	VoltValue =  (float)Volt_ADValue/Input_Max *3.3f* 1.51f ;		//5.1K + 10Kåˆ†å‹(é”‚ç”µæ± ç”µå‹)
 		
-	//¼ÆËãRUDDER
+	//è®¡ç®—RUDDER
 	TempAD = ADC_Value[1] ;
 	if(ISCJ431OKFlg == true) TempAD = (uint16_t)(TempAD * ( 3102 / (float)ADJ_ADValue)) ;
 	else			 TempAD = (uint16_t)(TempAD * ( 1519 / (float)IRV_ADValue)) ;
@@ -186,9 +186,9 @@ void GetADValue(void)
 	else              	Sampling_Data[RUDDER]   = TempAD ;
 		
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//!!!!!  ×¢Òâ : ÃÀ¹úÊÖºÍÈÕ±¾ÊÖ THROTTLE ºÍ ELEVATOR »¥»»   !!!!!
+	//!!!!!  æ³¨æ„ : ç¾å›½æ‰‹å’Œæ—¥æœ¬æ‰‹ THROTTLE å’Œ ELEVATOR äº’æ¢   !!!!!
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//¼ÆËãThrottle
+	//è®¡ç®—Throttle
 	if(RFHabit == __AmericaPlayer)
 	{
 		TempAD =  ADC_Value[2] ;
@@ -209,9 +209,9 @@ void GetADValue(void)
 	else              	Sampling_Data[THROTTLE]   = TempAD ;
 		
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//!!!!!  ×¢Òâ : ÃÀ¹úÊÖºÍÈÕ±¾ÊÖ THROTTLE ºÍ ELEVATOR »¥»»   !!!!!
+	//!!!!!  æ³¨æ„ : ç¾å›½æ‰‹å’Œæ—¥æœ¬æ‰‹ THROTTLE å’Œ ELEVATOR äº’æ¢   !!!!!
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//¼ÆËãELEVATOR
+	//è®¡ç®—ELEVATOR
 	if(RFHabit == __AmericaPlayer)
 	{
 		TempAD =  ADC_Value[3] ;
@@ -231,7 +231,7 @@ void GetADValue(void)
 	if(TempAD > Input_Max) 	Sampling_Data[ELEVATOR]   = Input_Max ; 
 	else              	Sampling_Data[ELEVATOR]   = TempAD ;
 		
-	//¼ÆËãAILERON
+	//è®¡ç®—AILERON
 	TempAD =  ADC_Value[4] ;
 	if(ISCJ431OKFlg == true) TempAD = (uint16_t)(TempAD * ( 3102 / (float)ADJ_ADValue)) ;
 	else			 TempAD = (uint16_t)(TempAD * ( 1519 / (float)IRV_ADValue)) ;
@@ -244,13 +244,13 @@ void GetADValue(void)
 	if(TempAD > Input_Max) 	Sampling_Data[AILERON]   = Input_Max ; 
 	else              	Sampling_Data[AILERON]   = TempAD ;
 		
-	//¸üĞÂÒ¡¸Ë²¿·ÖËùÓĞÎŞÏß·¢ËÍÍ¨µÀÖµ
+	//æ›´æ–°æ‘‡æ†éƒ¨åˆ†æ‰€æœ‰æ— çº¿å‘é€é€šé“å€¼
 	//tx________________Value_____________________Test ();
 	FRSKYD8_SendDataBuff[RUDDER]   = Get_SendValue((ChannelTypeDef)FRSKYD8_CH_Code[RUDDER]);  
 	FRSKYD8_SendDataBuff[THROTTLE] = Get_SendValue((ChannelTypeDef)FRSKYD8_CH_Code[THROTTLE]); 
 	FRSKYD8_SendDataBuff[ELEVATOR] = Get_SendValue((ChannelTypeDef)FRSKYD8_CH_Code[ELEVATOR]);  
 	FRSKYD8_SendDataBuff[AILERON]  = Get_SendValue((ChannelTypeDef)FRSKYD8_CH_Code[AILERON]); 
-	//¿ª¹ØÍ¨µÀ
+	//å¼€å…³é€šé“
 	FRSKYD8_SendDataBuff[AUX1]     = Get_SendValue((ChannelTypeDef)FRSKYD8_CH_Code[AUX1]);  
 	FRSKYD8_SendDataBuff[AUX2]     = Get_SendValue((ChannelTypeDef)FRSKYD8_CH_Code[AUX2]);  
 	FRSKYD8_SendDataBuff[AUX3]     = Get_SendValue((ChannelTypeDef)FRSKYD8_CH_Code[AUX3]);  

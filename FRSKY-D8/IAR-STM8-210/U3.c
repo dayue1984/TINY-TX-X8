@@ -1,5 +1,5 @@
 /*
-2017-8-16 : ȡ�� USART3 DMA��������жϡ����ڸ�Ϊÿ�η���һ�����ݺ�ֹͣ���´η���ǰ�ȹر��ٴ�(��Ϊ��� TIM2 ���߷����ж��໥��ͻ��Ӱ�����߷���ʱ��)
+2017-8-16 : 取消 USART3 DMA发送完成中断。现在改为每次发送一包数据后停止，下次发送前先关闭再打开(因为会和 TIM2 无线发送中断相互冲突，影响无线发送时基)
 */
 #include "include.h"
 
@@ -9,114 +9,114 @@
 #define  U3_DR_Address                    (USART3_BASE + 0x01)
 #define  U3_Buffer_Size 		   103
 
-bool DMA1_U3_Tx_Flag = false ; 		  //DMA���ͱ�־λ
+bool DMA1_U3_Tx_Flag = false ; 		  //DMA发送标志位
 
 static uint8_t U3_DMA_TXBuff[U3_Buffer_Size] = 
 {
-  	//��ʼͷ(7Byte  ���ݹ̶�)
+  	//起始头(7Byte  数据固定)
 	0x4C , 0x44 , 0x41 , 0x54 , 0x58 , 0x31 , 0x30 , 
-	//ң��������(1Byte  0x45 / 0x44)
+	//遥控器类型(1Byte  0x45 / 0x44)
 	0x45 , 
-	//ң���������汾��(3Byte  �� - �� - ��)
+	//遥控器软件版本号(3Byte  年 - 月 - 日)
 	0x00 , 0x00 , 0x00 , 
-	//����Э��汾��(1Byte)
+	//无线协议版本号(1Byte)
 	0x00 ,
-	//������/�ձ���ģʽѡ��
+	//美国手/日本手模式选择
 	0x00 ,
-	//ң����ΨһID��(4Byte)
+	//遥控器唯一ID号(4Byte)
 	0x00 , 0x00 , 0x00 , 0x00 , 
-	//16ͨ������(ÿͨ��2Byte = 16*2Byte = 32Byte)
+	//16通道数据(每通道2Byte = 16*2Byte = 32Byte)
 	0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 
 	0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 ,
 	0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 ,
 	0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 ,
-	//ͨ�������־λ(1Byte)
+	//通道反向标志位(1Byte)
 	0x00 , 
-	//���а��� + 8λ���뿪��GPIOֵ(2Byte)
+	//所有按键 + 8位拨码开关GPIO值(2Byte)
 	0x00 , 0x00 , 0x00 , 
-	//��ص�ѹֵ(2Byte  ��ص�ѹ�Ŵ�100��)
+	//电池电压值(2Byte  电池电压放大100倍)
 	0x00 , 0x00 , 
-	//�ο���431 + ��Ƶģ�� + ��λУ׼�Ƿ�ɹ�  ��־λ(1Byte)
+	//参考电431 + 高频模块 + 中位校准是否成功  标志位(1Byte)
 	0x00 , 
-	//����ͨ��AD����ԭʼֵ(ÿͨ��2Byte = 6*2Byte = 12Byte)
+	//所有通道AD采样原始值(每通道2Byte = 6*2Byte = 12Byte)
 	0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 
 	0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 
-	//LED״̬(1Byte)  1��������  0����Ϩ��
+	//LED状态(1Byte)  1代表点亮  0代表熄灭
 	0x00 , 
-	//����״̬(1Byte)
+	//报警状态(1Byte)
 	0x00 , 
-	//��ʱ����������(1Byte)
+	//定时器死机次数(1Byte)
 	0x00 , 
-	//��ҡ��ƫ��ֵ(4Byte)
+	//四摇杆偏置值(4Byte)
 	0x00 , 0x00 , 0x00 , 0x00 , 
 	
-	//��ҡ�����ADֵ(4*2Byte = 8Byte)
+	//四摇杆最大AD值(4*2Byte = 8Byte)
 	0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 
 	
-	//��ҡ����λADֵ(4*2Byte = 8Byte)
+	//四摇杆中位AD值(4*2Byte = 8Byte)
 	0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 
 	
-	//��ҡ����СADֵ(4*2Byte = 8Byte)
+	//四摇杆最小AD值(4*2Byte = 8Byte)
 	0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 
 	
-	//���ݰ�У���(2Byte)
+	//数据包校验和(2Byte)
 	0x00 , 0x00 , 
 }; 
 
 
 void U3_Init(void)
 {
-  	CLK -> PCKENR3 |= (1<<4) ; 						//�� usart3 ʱ�� 
+  	CLK -> PCKENR3 |= (1<<4) ; 						//打开 usart3 时钟 
 	
-	//��ʼ�� DMA1_CH1 (Usart3_TX DMA)
+	//初始化 DMA1_CH1 (Usart3_TX DMA)
 	DMA_DeInit(DMA1_Channel1);
-	DMA_Init( DMA1_Channel1 , (uint32_t)U3_DMA_TXBuff,			//DMA�ڴ��ַ
-                                  U3_DR_Address,				//DMA ADC�����ַ
-				  U3_Buffer_Size,				//�������ݸ��� : 103
-				  DMA_DIR_MemoryToPeripheral,			//���䷽�� : �ڴ� -> ����
-				  DMA_Mode_Normal,				//DMAģʽ : ���δ���
-                                  DMA_MemoryIncMode_Inc,			//�ڴ��ַ�ۼ�
-				  DMA_Priority_High,				//DMA���ȼ� : ��
-				  DMA_MemoryDataSize_Byte );			//�������ݳߴ� : 8 bit
-	DMA_Cmd(DMA1_Channel1,DISABLE);						//�ȹر�DMA(��Ҫʱ�ٴ�)
+	DMA_Init( DMA1_Channel1 , (uint32_t)U3_DMA_TXBuff,			//DMA内存地址
+                                  U3_DR_Address,				//DMA ADC外设地址
+				  U3_Buffer_Size,				//传输数据个数 : 103
+				  DMA_DIR_MemoryToPeripheral,			//传输方向 : 内存 -> 外设
+				  DMA_Mode_Normal,				//DMA模式 : 单次传输
+                                  DMA_MemoryIncMode_Inc,			//内存地址累加
+				  DMA_Priority_High,				//DMA优先级 : 高
+				  DMA_MemoryDataSize_Byte );			//传输数据尺寸 : 8 bit
+	DMA_Cmd(DMA1_Channel1,DISABLE);						//先关闭DMA(需要时再打开)
 	DMA_GlobalCmd(ENABLE);
 	
-	//Usart3��ʼ��
+	//Usart3初始化
 	uint16_t BRR_Counts = Fosc / BAUD ; 
 	
 	USART3 -> BRR2  =  BRR_Counts & 0x000F ; 
        	USART3 -> BRR2 |= ((BRR_Counts & 0xf000) >> 8);
-    	USART3 -> BRR1  = ((BRR_Counts & 0x0ff0) >> 4);     			/*�ȸ�BRR2��ֵ ���������BRR1*/  
-	USART3 -> CR2   = (1<<3) ; 						//����ʹ��
+    	USART3 -> BRR1  = ((BRR_Counts & 0x0ff0) >> 4);     			/*先给BRR2赋值 最后再设置BRR1*/  
+	USART3 -> CR2   = (1<<3) ; 						//发送使能
 	USART3 -> CR3   = 0 ; 
-	USART3 -> CR1 &= ~(1<<5);						//ʹ�ܴ���
+	USART3 -> CR1 &= ~(1<<5);						//使能串口
 	
 	DMA1_U3_Tx_Flag = false ; 
 }
 
 
 //==============================================================================
-//���ʹ������ݰ�
+//发送串口数据包
 //==============================================================================
 void U3_DMATX_ONOFF(void)
 {
-  	//������ɱ�־λ
+  	//发送完成标志位
   	if (DMA1_Channel1 -> CSPR & (1<<1))
 	{
-		DMA1_Channel1 -> CSPR &= ~(1<<1) ; 	//����жϱ��
-		USART3 -> CR5   &= ~(1<<7) ; 		//�ǳ���Ҫ �ر�UART1 DMA��������
-		DMA1_Channel1->CCR &= ~(1<<0);		//�ر�DMA
-		DMA1_U3_Tx_Flag = false ; 		//��λ��־λ
+		DMA1_Channel1 -> CSPR &= ~(1<<1) ; 	//清除中断标记
+		USART3 -> CR5   &= ~(1<<7) ; 		//非常重要 关闭UART1 DMA发送请求
+		DMA1_Channel1->CCR &= ~(1<<0);		//关闭DMA
+		DMA1_U3_Tx_Flag = false ; 		//置位标志位
 	}
   
-  	//������ɺ󣬲ŻῪʼ����
+  	//发送完成后，才会开始发送
     	if (DMA1_U3_Tx_Flag == false)
 	{
-		//���÷��͸���
+		//设置发送个数
 		DMA1_Channel1 -> CNBTR = U3_Buffer_Size;
 		
-		//����UART3 DMA���ͣ�
-		USART3 -> CR5   = (1<<7) ; 					//ʹ�� USART3 DMA TX
+		//启动UART3 DMA发送！
+		USART3 -> CR5   = (1<<7) ; 					//使能 USART3 DMA TX
 		DMA1_Channel1 -> CCR |= (1<<0) ;
 		
 		DMA1_U3_Tx_Flag = true;
@@ -124,8 +124,8 @@ void U3_DMATX_ONOFF(void)
 }
 
 //==============================================================================
-//��Ϊ���ݰ�̫��Ϊ�˲�Ӱ�������������Ӧ�ٶȣ���һ���������ݲ��5�����롣
-//�������������ݺ���ʹ�ܷ��͡�
+//因为数据包太大，为了不影响其他程序的响应速度，将一包发送数据拆成5次载入。
+//载入完所有数据后，再使能发送。
 //==============================================================================
 void BuildUsart3Data(void)
 {
@@ -133,21 +133,21 @@ void BuildUsart3Data(void)
 	uint8_t i = 0 ; 
 	uint16_t DataTemp = 0 ; 
 	
-	//����ǰ 17 Byte ����
+	//载入前 17 Byte 数据
 	if(Phase == 0)
 	{
 	  	//                  L                         D                          A                         T                         X                          1                        0
-		U3_DMA_TXBuff[0]  = 0x4C ; U3_DMA_TXBuff[1] = 0X44 ; U3_DMA_TXBuff[2] = 0x41 ; U3_DMA_TXBuff[3] = 0x54 ; U3_DMA_TXBuff[4] = 0X58 ; U3_DMA_TXBuff[5] = 0x31 ; U3_DMA_TXBuff[6] = 0x30 ; //��ʼͷ(7Byte)
-		U3_DMA_TXBuff[7]  = RF_TypeVersion ;											//ң��������(FRSKYD8)
-		U3_DMA_TXBuff[8]  = 18   ; U3_DMA_TXBuff[9] =  1 ; U3_DMA_TXBuff[10] = 25 ; 						//��������ʱ�� : 2018 - 1 - 25
-		U3_DMA_TXBuff[11] = MasterInitProtocolVersion ; 									//����Э��汾�� (1Byte)
-		U3_DMA_TXBuff[12] = RFHabit ;												//������/�ձ���ѡ�� (0:������ / 1:�ձ���)
-		U3_DMA_TXBuff[13] = 0x00 ; //(TransmitterID >> 24)&0xff ; 								//ң����ID��(SFHSS ֻ��16Byte ���Ը�16λ�̶�Ϊ0)
+		U3_DMA_TXBuff[0]  = 0x4C ; U3_DMA_TXBuff[1] = 0X44 ; U3_DMA_TXBuff[2] = 0x41 ; U3_DMA_TXBuff[3] = 0x54 ; U3_DMA_TXBuff[4] = 0X58 ; U3_DMA_TXBuff[5] = 0x31 ; U3_DMA_TXBuff[6] = 0x30 ; //起始头(7Byte)
+		U3_DMA_TXBuff[7]  = RF_TypeVersion ;											//遥控器类型(FRSKYD8)
+		U3_DMA_TXBuff[8]  = 18   ; U3_DMA_TXBuff[9] =  1 ; U3_DMA_TXBuff[10] = 25 ; 						//软件编译时间 : 2018 - 1 - 25
+		U3_DMA_TXBuff[11] = MasterInitProtocolVersion ; 									//无线协议版本号 (1Byte)
+		U3_DMA_TXBuff[12] = RFHabit ;												//美国手/日本手选择 (0:美国手 / 1:日本手)
+		U3_DMA_TXBuff[13] = 0x00 ; //(TransmitterID >> 24)&0xff ; 								//遥控器ID号(SFHSS 只有16Byte 所以高16位固定为0)
 		U3_DMA_TXBuff[14] = 0x00 ; //(TransmitterID >> 16)&0xff ;
 		U3_DMA_TXBuff[15] = (TransmitterID >> 8)&0xff ;
 		U3_DMA_TXBuff[16] = TransmitterID &0xff ; 
 	}
-	//���� 16ͨ�� ����
+	//载入 16通道 数据
 	else if(Phase == 4)
 	{
 	  	for(i = 0 ; i < PTOTOCOL_MAX_CHANNEL ; i++)
@@ -159,10 +159,10 @@ void BuildUsart3Data(void)
 			U3_DMA_TXBuff[18 + 2*i] = DataTemp & 0xFF;
 		}
 	}
-	//���� ͨ�������־λ(1Byte) + ���а��� + 8λ���뿪��GPIOֵ(2Byte) + ��ص�ѹֵ(2Byte) + �ο���431 ��Ƶģ�� ��λУ׼�ɹ� ��־λ
+	//载入 通道反向标志位(1Byte) + 所有按键 + 8位拨码开关GPIO值(2Byte) + 电池电压值(2Byte) + 参考电431 高频模块 中位校准成功 标志位
 	else if(Phase == 7)
 	{
-		U3_DMA_TXBuff[49] = ChannelInversion_flg ; 			//ͨ�������־λ
+		U3_DMA_TXBuff[49] = ChannelInversion_flg ; 			//通道反向标志位
 		
 		DataTemp  = 0x0000 ; 
 		if(GPIOC -> IDR & (1<<4)) DataTemp |= 0x2000 ; 
@@ -208,23 +208,23 @@ void BuildUsart3Data(void)
 		if(FTDebug_err_flg == false) 	        DataTemp |= (1<<0) ;
 		U3_DMA_TXBuff[55] = DataTemp & 0xFF ;
 	}
-	//���� ����ͨ��AD����ԭʼֵ + LED״̬ + ����״̬ + ��ʱ���������� + ��ҡ��ƫ��ֵ(4Byte) + ��ҡ����λADֵ
+	//载入 所有通道AD采样原始值 + LED状态 + 报警状态 + 定时器死机次数 + 四摇杆偏置值(4Byte) + 四摇杆中位AD值
 	else if(Phase == 8)
 	{
-	  	//7ͨ��ADֵ
+	  	//7通道AD值
 		for(i = 0 ; i < 7 ; i++)
 		{
 			DataTemp = ADC_Value[i] ; 
 			U3_DMA_TXBuff[56 + 2*i] = DataTemp >> 8 ;
 			U3_DMA_TXBuff[57 + 2*i] = DataTemp & 0xFF ;
 		}
-		//LED״̬
+		//LED状态
 		U3_DMA_TXBuff[70] = LED_Status_SendDat ; 
-		//����״̬
+		//报警状态
 		U3_DMA_TXBuff[71] = RunStatus ; 
-		//��ʱ����������
+		//定时器死机次数
 		U3_DMA_TXBuff[72] = TIM2_ErrorCnt ; 
-		//��ҡ��ƫ��ֵ + 4ҡ�˼�ֵ(�����λ����СADֵ)
+		//四摇杆偏置值 + 4摇杆极值(最大、中位、最小AD值)
 		for(i = 0 ; i < 4 ; i++)
 		{
 			U3_DMA_TXBuff[73+i] = Sampling_Offset[i];
@@ -244,7 +244,7 @@ void BuildUsart3Data(void)
 	}
 	else if(Phase == 9)
 	{
-	  	//�������ۼӺ�
+	  	//所有数累加和
 	  	DataTemp = 0 ; 
 		for(i = 0 ; i < (U3_Buffer_Size - 2) ; i++)
 		{
@@ -254,7 +254,7 @@ void BuildUsart3Data(void)
 		U3_DMA_TXBuff[102] = DataTemp & 0xFF;
 	}
 	
-	if(++Phase > 10) { Phase = 0 ; U3_DMATX_ONOFF() ;} //��ʼ����
+	if(++Phase > 10) { Phase = 0 ; U3_DMATX_ONOFF() ;} //开始发送
 }
 
 
