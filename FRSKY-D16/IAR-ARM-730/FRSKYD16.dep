@@ -6,363 +6,139 @@
   <configuration>
     <name>Debug</name>
     <outputs>
-      <file>$PROJ_DIR$\Debug\Obj\stm8l15x_dma.o</file>
-      <file>$TOOLKIT_DIR$\inc\c\xencoding_limits.h</file>
-      <file>$PROJ_DIR$\include.h</file>
-      <file>$TOOLKIT_DIR$\inc\c\DLib_Defaults.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm8l15x_it.o</file>
-      <file>$PROJ_DIR$\boot.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm8l15x_usart.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\SPI2.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\boot.pbi</file>
-      <file>$PROJ_DIR$\Menu\Menu.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\SPI2.o</file>
-      <file>$PROJ_DIR$\Menu\FTDebug.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\adc.pbi</file>
-      <file>$TOOLKIT_DIR$\inc\c\stdlib.h</file>
-      <file>$TOOLKIT_DIR$\lib\dlstm8smn.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\ee.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\key.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\uniqueID.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm8l15x_adc.pbi</file>
-      <file>$TOOLKIT_DIR$\inc\c\ycheck.h</file>
-      <file>$PROJ_DIR$\uniqueID.h</file>
-      <file>$PROJ_DIR$\tbc.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\LED.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\Menu.o</file>
-      <file>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\inc\stm8l15x_flash.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\adc.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm8l15x_dma.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\beep.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\Menu.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\StartUp.o</file>
-      <file>$PROJ_DIR$\EE.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\U3.pbi</file>
-      <file>$TOOLKIT_DIR$\inc\c\ysizet.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\CC2500.o</file>
-      <file>$PROJ_DIR$\RF\FRSKYD16.h</file>
-      <file>$PROJ_DIR$\SPI2.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\FRSKYD16.o</file>
-      <file>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\inc\stm8l15x_dma.h</file>
-      <file>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\inc\stm8l15x_adc.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\tbc.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\main.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\FRSKYD16.pbd</file>
-      <file>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\inc\stm8l15x_usart.h</file>
-      <file>$PROJ_DIR$\beep.h</file>
-      <file>$PROJ_DIR$\Menu\PowerOn.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\FTDebug.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm8l15x_usart.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\FTDebug.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\ee.o</file>
-      <file>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\inc\stm8l15x_tim1.h</file>
-      <file>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\src\stm8l15x_adc.c</file>
-      <file>$PROJ_DIR$\Menu\Menu.c</file>
-      <file>$PROJ_DIR$\Menu\StartUp.c</file>
+      <file>$PROJ_DIR$\adc.c</file>
+      <file>$PROJ_DIR$\uniqueID.c</file>
+      <file>$PROJ_DIR$\stm8l15x_it.c</file>
+      <file>$PROJ_DIR$\tbc.c</file>
       <file>$PROJ_DIR$\boot.c</file>
+      <file>$PROJ_DIR$\main.c</file>
       <file>$PROJ_DIR$\ee.c</file>
+      <file>$PROJ_DIR$\U3.c</file>
+      <file>$PROJ_DIR$\beep.c</file>
+      <file>$PROJ_DIR$\key.c</file>
       <file>$PROJ_DIR$\LED.c</file>
+      <file>$PROJ_DIR$\SPI2.c</file>
+    </outputs>
+    <forcedrebuild>
+      <name>[REBUILD_ALL]</name>
+    </forcedrebuild>
+  </configuration>
+  <configuration>
+    <name>Release</name>
+    <outputs>
+      <file>$PROJ_DIR$\adc.c</file>
+      <file>$PROJ_DIR$\uniqueID.c</file>
+      <file>$PROJ_DIR$\RF\CC2500.c</file>
+      <file>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\src\stm8l15x_adc.c</file>
+      <file>$PROJ_DIR$\Menu\PowerOn.c</file>
+      <file>$PROJ_DIR$\Menu\StartUp.c</file>
+      <file>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\src\stm8l15x_usart.c</file>
+      <file>$PROJ_DIR$\stm8l15x_it.c</file>
       <file>$PROJ_DIR$\Menu\FTDebug.c</file>
       <file>$PROJ_DIR$\tbc.c</file>
-      <file>$PROJ_DIR$\stm8l15x_it.c</file>
-      <file>$PROJ_DIR$\key.c</file>
-      <file>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\src\stm8l15x_usart.c</file>
-      <file>$PROJ_DIR$\Menu\PowerOn.c</file>
-      <file>$PROJ_DIR$\RF\CC2500.c</file>
-      <file>$PROJ_DIR$\uniqueID.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\StartUp.pbi</file>
-      <file>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\src\stm8l15x_dma.c</file>
-      <file>$PROJ_DIR$\SPI2.c</file>
+      <file>$PROJ_DIR$\boot.c</file>
+      <file>$PROJ_DIR$\include.h</file>
       <file>$PROJ_DIR$\main.c</file>
-      <file>$PROJ_DIR$\U3.c</file>
-      <file>$PROJ_DIR$\adc.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\U3.o</file>
-      <file>$PROJ_DIR$\beep.c</file>
       <file>$PROJ_DIR$\RF\FRSKYD16.c</file>
-      <file>$TOOLKIT_DIR$\inc\c\intrinsics.h</file>
-      <file>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\inc\stm8l15x_clk.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\FRSKYD16.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm8l15x_it.pbi</file>
-      <file>$TOOLKIT_DIR$\inc\c\DLib_Threads.h</file>
-      <file>$TOOLKIT_DIR$\inc\c\yvals.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\CC2500.pbi</file>
-      <file>$PROJ_DIR$\adc.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\boot.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\uniqueID.o</file>
-      <file>$PROJ_DIR$\LED.h</file>
-      <file>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\inc\stm8l15x.h</file>
-      <file>$PROJ_DIR$\U3.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\LED.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\key.pbi</file>
-      <file>$PROJ_DIR$\stm8l15x_conf.h</file>
-      <file>$PROJ_DIR$\key.h</file>
-      <file>$PROJ_DIR$\RF\CC2500.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\beep.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\PowerOn.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\PowerOn.pbi</file>
-      <file>$PROJ_DIR$\Debug\Exe\FRSKYD16.bin</file>
-      <file>$PROJ_DIR$\Debug\Obj\tbc.pbi</file>
-      <file>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\inc\stm8l15x_gpio.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm8l15x_adc.o</file>
-      <file>$PROJ_DIR$\Menu\StartUp.h</file>
-      <file>$TOOLKIT_DIR$\inc\c\DLib_Product.h</file>
-      <file>$PROJ_DIR$\Debug\Exe\FRSKYD16.out</file>
-      <file>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\inc\stm8l15x_spi.h</file>
+      <file>$PROJ_DIR$\ee.c</file>
+      <file>$PROJ_DIR$\U3.c</file>
+      <file>$PROJ_DIR$\Menu\Menu.c</file>
+      <file>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\src\stm8l15x_dma.c</file>
+      <file>$PROJ_DIR$\beep.c</file>
+      <file>$PROJ_DIR$\key.c</file>
+      <file>$PROJ_DIR$\LED.c</file>
+      <file>$PROJ_DIR$\SPI2.c</file>
+      <file>$PROJ_DIR$\Release\Obj\FRSKYD16.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\U3.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\beep.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\key.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\uniqueID.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\adc.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\LED.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\boot.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\main.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\SPI2.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\stm8l15x_it.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\tbc.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\ee.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\stm8l15x_dma.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\stm8l15x_usart.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\FTDebug.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\Menu.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\PowerOn.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\StartUp.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\CC2500.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\stm8l15x_adc.__cstat.et</file>
+      <file>$PROJ_DIR$\Release\Obj\CC2500.o</file>
+      <file>$PROJ_DIR$\Release\Obj\stm8l15x_adc.o</file>
+      <file>$PROJ_DIR$\Release\Obj\beep.o</file>
+      <file>$PROJ_DIR$\Release\Obj\boot.o</file>
+      <file>$PROJ_DIR$\Release\Obj\ee.o</file>
+      <file>$PROJ_DIR$\Release\Obj\key.o</file>
+      <file>$PROJ_DIR$\Release\Obj\FRSKYD16.o</file>
+      <file>$PROJ_DIR$\Release\Obj\LED.o</file>
+      <file>$PROJ_DIR$\Release\Obj\tbc.o</file>
+      <file>$PROJ_DIR$\Release\Obj\stm8l15x_dma.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\main.o</file>
+      <file>$PROJ_DIR$\Release\Obj\stm8l15x_usart.o</file>
+      <file>$PROJ_DIR$\Release\Obj\StartUp.o</file>
+      <file>$PROJ_DIR$\Release\Obj\stm8l15x_it.o</file>
+      <file>$PROJ_DIR$\Release\Obj\adc.o</file>
+      <file>$PROJ_DIR$\Release\Obj\stm8l15x_dma.o</file>
+      <file>$PROJ_DIR$\Release\Obj\Menu.o</file>
+      <file>$PROJ_DIR$\Release\Obj\SPI2.o</file>
+      <file>$PROJ_DIR$\Release\Obj\uniqueID.o</file>
+      <file>$PROJ_DIR$\Release\Obj\U3.o</file>
+      <file>$PROJ_DIR$\Release\Obj\stm8l15x_adc.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\FTDebug.o</file>
+      <file>$PROJ_DIR$\Release\Obj\PowerOn.o</file>
+      <file>$PROJ_DIR$\Release\Obj\key.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\LED.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\main.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\tbc.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\StartUp.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\boot.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\FRSKYD16.pbd</file>
+      <file>$PROJ_DIR$\Release\Obj\stm8l15x_usart.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\FTDebug.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\Menu.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\PowerOn.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\CC2500.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\beep.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\adc.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\ee.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\uniqueID.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\FRSKYD16.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\SPI2.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\stm8l15x_it.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\U3.pbi</file>
+      <file>$PROJ_DIR$\Release\Exe\FRSKYD16.out</file>
     </outputs>
     <file>
       <name>[ROOT_NODE]</name>
       <outputs>
         <tool>
           <name>ILINK</name>
-          <file> 101</file>
+          <file> 86</file>
         </tool>
       </outputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\src\stm8l15x_adc.c</name>
+      <name>$PROJ_DIR$\adc.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 19</file>
+          <name>__cstat</name>
+          <file> 27</file>
         </tool>
         <tool>
-          <name>ICCSTM8</name>
-          <file> 98</file>
+          <name>BICOMP</name>
+          <file> 79</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 89 102 75 85 25 43 74 39 38 97 50</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\Menu\Menu.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 29</file>
-        </tool>
-        <tool>
           <name>ICCSTM8</name>
-          <file> 24</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 85 10 5 84 86 43 3 78 90 36 91 99 89 25 79 14 44 22 81 31 21 35 45 12 74 75 102 1 20 2 39 38 97 50 33 15 100</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\Menu\StartUp.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 65</file>
-        </tool>
-        <tool>
-          <name>ICCSTM8</name>
-          <file> 30</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 21 1 44 85 81 45 38 20 14 22 31 35 12 74 50 75 15 79 84 90 5 36 86 91 10 99 39 97 33 100 2 89 25 102 43 3 78</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\boot.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 9</file>
-        </tool>
-        <tool>
-          <name>ICCSTM8</name>
-          <file> 82</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 85 10 5 84 86 43 3 78 90 36 91 99 89 25 79 14 44 22 81 31 21 35 45 12 74 75 102 1 20 2 39 38 97 50 33 15 100</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\ee.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 16</file>
-        </tool>
-        <tool>
-          <name>ICCSTM8</name>
-          <file> 49</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 85 99 36 90 91 43 3 78 84 5 86 10 25 79 14 44 22 81 31 21 35 45 12 89 75 102 1 20 2 74 39 38 97 50 33 15 100</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\LED.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 23</file>
-        </tool>
-        <tool>
-          <name>ICCSTM8</name>
-          <file> 87</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 1 31 14 12 85 22 35 38 20 44 81 21 45 74 50 75 15 79 84 90 5 36 86 91 10 99 39 97 33 100 2 89 25 102 43 3 78</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\Menu\FTDebug.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 48</file>
-        </tool>
-        <tool>
-          <name>ICCSTM8</name>
-          <file> 46</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 85 22 35 14 31 12 43 3 78 44 81 21 45 25 79 84 90 5 36 86 91 10 99 89 75 102 1 20 2 74 39 38 97 50 33 15 100</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\tbc.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 96</file>
-        </tool>
-        <tool>
-          <name>ICCSTM8</name>
-          <file> 40</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 85 91 90 36 99 43 3 78 84 5 86 10 25 79 14 44 22 81 31 21 35 45 12 89 75 102 1 20 2 74 39 38 97 50 33 15 100</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\stm8l15x_it.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 77</file>
-        </tool>
-        <tool>
-          <name>ICCSTM8</name>
-          <file> 4</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 85 99 36 90 91 43 3 78 84 5 86 10 25 79 14 44 22 81 31 21 35 45 12 89 75 102 1 20 2 74 39 38 97 50 33 15 100</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\key.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 88</file>
-        </tool>
-        <tool>
-          <name>ICCSTM8</name>
-          <file> 17</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 1 86 84 85 5 10 38 20 90 36 91 99 74 50 75 15 79 14 44 22 81 31 21 35 45 12 39 97 33 100 2 89 25 102 43 3 78</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\src\stm8l15x_usart.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 6</file>
-        </tool>
-        <tool>
-          <name>ICCSTM8</name>
-          <file> 47</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 75 25 85 43 89 102 74 39 38 97 50</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\Menu\PowerOn.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 94</file>
-        </tool>
-        <tool>
-          <name>ICCSTM8</name>
-          <file> 93</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 85 21 44 81 45 43 3 78 14 22 31 35 12 74 25 79 84 90 5 36 86 91 10 99 89 75 102 1 20 2 39 38 97 50 33 15 100</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\RF\CC2500.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 80</file>
-        </tool>
-        <tool>
-          <name>ICCSTM8</name>
-          <file> 34</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 1 84 86 85 5 10 38 20 90 36 91 99 74 50 75 15 79 14 44 22 81 31 21 35 45 12 39 97 33 100 2 89 25 102 43 3 78</file>
+          <file> 11</file>
         </tool>
       </inputs>
     </file>
@@ -370,56 +146,153 @@
       <name>$PROJ_DIR$\uniqueID.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 18</file>
+          <name>__cstat</name>
+          <file> 26</file>
         </tool>
         <tool>
-          <name>ICCSTM8</name>
-          <file> 83</file>
+          <name>BICOMP</name>
+          <file> 81</file>
         </tool>
       </outputs>
       <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 1 84 86 85 5 10 38 20 90 36 91 99 74 50 75 15 79 14 44 22 81 31 21 35 45 12 39 97 33 100 2 89 25 102 43 3 78</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\src\stm8l15x_dma.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 27</file>
-        </tool>
-        <tool>
-          <name>ICCSTM8</name>
-          <file> 0</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 85 43 25 89 75 102 74 39 38 97 50</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\SPI2.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 7</file>
-        </tool>
         <tool>
           <name>ICCSTM8</name>
           <file> 11</file>
         </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\RF\CC2500.c</name>
+      <outputs>
+        <tool>
+          <name>__cstat</name>
+          <file> 41</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 77</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\src\stm8l15x_adc.c</name>
+      <outputs>
+        <tool>
+          <name>__cstat</name>
+          <file> 42</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 63</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Menu\PowerOn.c</name>
+      <outputs>
+        <tool>
+          <name>__cstat</name>
+          <file> 39</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 76</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Menu\StartUp.c</name>
+      <outputs>
+        <tool>
+          <name>__cstat</name>
+          <file> 40</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 70</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\src\stm8l15x_usart.c</name>
+      <outputs>
+        <tool>
+          <name>__cstat</name>
+          <file> 36</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 73</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\stm8l15x_it.c</name>
+      <outputs>
+        <tool>
+          <name>__cstat</name>
+          <file> 32</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 84</file>
+        </tool>
       </outputs>
       <inputs>
         <tool>
+          <name>ICCSTM8</name>
+          <file> 11</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Menu\FTDebug.c</name>
+      <outputs>
+        <tool>
+          <name>__cstat</name>
+          <file> 37</file>
+        </tool>
+        <tool>
           <name>BICOMP</name>
-          <file> 85 86 84 5 10 43 3 78 90 36 91 99 25 79 14 44 22 81 31 21 35 45 12 89 75 102 1 20 2 74 39 38 97 50 33 15 100</file>
+          <file> 74</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\tbc.c</name>
+      <outputs>
+        <tool>
+          <name>__cstat</name>
+          <file> 33</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 69</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCSTM8</name>
+          <file> 11</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\boot.c</name>
+      <outputs>
+        <tool>
+          <name>__cstat</name>
+          <file> 29</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 71</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCSTM8</name>
+          <file> 11</file>
         </tool>
       </inputs>
     </file>
@@ -427,75 +300,18 @@
       <name>$PROJ_DIR$\main.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 8</file>
+          <name>__cstat</name>
+          <file> 30</file>
         </tool>
         <tool>
-          <name>ICCSTM8</name>
-          <file> 41</file>
+          <name>BICOMP</name>
+          <file> 68</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 85 21 44 81 45 43 3 78 14 22 31 35 12 74 25 79 84 90 5 36 86 91 10 99 89 75 102 1 20 2 39 38 97 50 33 15 100</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\U3.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 32</file>
-        </tool>
-        <tool>
           <name>ICCSTM8</name>
-          <file> 71</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 1 21 44 85 81 45 38 20 14 22 31 35 12 74 50 75 15 79 84 90 5 36 86 91 10 99 39 97 33 100 2 89 25 102 43 3 78</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\adc.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 13</file>
-        </tool>
-        <tool>
-          <name>ICCSTM8</name>
-          <file> 26</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 1 36 85 99 90 91 38 20 84 5 86 10 74 50 75 15 79 14 44 22 81 31 21 35 45 12 39 97 33 100 2 89 25 102 43 3 78</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\beep.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 28</file>
-        </tool>
-        <tool>
-          <name>ICCSTM8</name>
-          <file> 92</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 85 84 86 5 10 43 3 78 90 36 91 99 25 79 14 44 22 81 31 21 35 45 12 89 75 102 1 20 2 74 39 38 97 50 33 15 100</file>
+          <file> 11</file>
         </tool>
       </inputs>
     </file>
@@ -503,37 +319,155 @@
       <name>$PROJ_DIR$\RF\FRSKYD16.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 76</file>
+          <name>__cstat</name>
+          <file> 22</file>
         </tool>
         <tool>
-          <name>ICCSTM8</name>
-          <file> 37</file>
+          <name>BICOMP</name>
+          <file> 82</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\ee.c</name>
+      <outputs>
+        <tool>
+          <name>__cstat</name>
+          <file> 34</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 80</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 1 86 84 85 5 10 38 20 90 36 91 99 74 50 75 15 79 14 44 22 81 31 21 35 45 12 39 97 33 100 2 89 25 102 43 3 78</file>
+          <name>ICCSTM8</name>
+          <file> 11</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\Debug\Exe\FRSKYD16.out</name>
+      <name>$PROJ_DIR$\U3.c</name>
       <outputs>
         <tool>
-          <name>OBJCOPY</name>
-          <file> 95</file>
+          <name>__cstat</name>
+          <file> 23</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 85</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCSTM8</name>
+          <file> 11</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Menu\Menu.c</name>
+      <outputs>
+        <tool>
+          <name>__cstat</name>
+          <file> 38</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 75</file>
         </tool>
       </outputs>
     </file>
-    <forcedrebuild>
-      <name>[REBUILD_ALL]</name>
-    </forcedrebuild>
-  </configuration>
-  <configuration>
-    <name>Release</name>
-    <outputs/>
+    <file>
+      <name>$PROJ_DIR$\LIB\STM8L15x_StdPeriph_Driver\src\stm8l15x_dma.c</name>
+      <outputs>
+        <tool>
+          <name>__cstat</name>
+          <file> 35</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 52</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\beep.c</name>
+      <outputs>
+        <tool>
+          <name>__cstat</name>
+          <file> 24</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 78</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCSTM8</name>
+          <file> 11</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\key.c</name>
+      <outputs>
+        <tool>
+          <name>__cstat</name>
+          <file> 25</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 66</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCSTM8</name>
+          <file> 11</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\LED.c</name>
+      <outputs>
+        <tool>
+          <name>__cstat</name>
+          <file> 28</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 67</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCSTM8</name>
+          <file> 11</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\SPI2.c</name>
+      <outputs>
+        <tool>
+          <name>__cstat</name>
+          <file> 31</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 83</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCSTM8</name>
+          <file> 11</file>
+        </tool>
+      </inputs>
+    </file>
     <forcedrebuild>
       <name>[MULTI_TOOL]</name>
       <tool>ILINK</tool>

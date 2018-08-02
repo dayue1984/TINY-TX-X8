@@ -7,22 +7,22 @@
 *******************************************************************************/
 #include "include.h"
 
-void main(void)
+void main( void )
 {
-  	disableInterrupts();
-	boot();
-	enableInterrupts();
-	WatchDog_Init();
-	while(1)
-	{
-	  	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	  	//注意 : 这个 2mS 和实际的 2mS 相差比较大，不能作为精确计数 
-	  	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	  	if(tbc_2ms_flag == true)
-		{
-		  	tbc_2ms_flag = false ;
-			FeedTheDog();						//喂狗
-			menu();
-		}
-	}
+    disableInterrupts();
+    boot();
+    enableInterrupts();
+    WatchDog_Init();
+    while( 1 )
+    {
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //注意 : 这个 2mS 和实际的 2mS 相差比较大，不能作为精确计数
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if( tbc_2ms_flag == true )
+        {
+            tbc_2ms_flag = false ;
+            FeedTheDog();                       //喂狗
+            menu();
+        }
+    }
 }
