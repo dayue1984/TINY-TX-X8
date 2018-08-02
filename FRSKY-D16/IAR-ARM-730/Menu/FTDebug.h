@@ -2,7 +2,7 @@
 #define  __FTDEBUG_H_
 
 
-extern bool FTDebug_err_flg ; 							//ÖĞÎ»Ğ£×¼Ê§°Ü±êÖ¾Î»( 1: ¹¤³§Ğ£×¼Ê§°Ü(¹ÊÕÏÌáÊ¾)     0: ¹¤³§Ğ£×¼³É¹¦)
+extern bool FTDebug_err_flg ; 							//ä¸­ä½æ ¡å‡†å¤±è´¥æ ‡å¿—ä½( 1: å·¥å‚æ ¡å‡†å¤±è´¥(æ•…éšœæç¤º)     0: å·¥å‚æ ¡å‡†æˆåŠŸ)
 void FTDebug(void);
 
 #endif

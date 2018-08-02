@@ -9,16 +9,16 @@ typedef enum
 {
   	__stStop			= 0 , 
 	
-	__stKeyClick 			= 1 , 					//°´¼üÌáÊ¾Òô
-	__stMidOffSet  			= 2 , 					//Î¢µ÷ÖĞÖµµã
-	__stExitStaticOverTime		= 3 , 					//ÍË³ö¾²Ö¹³¬Ê±×´Ì¬
-	__stMidADAdjustDown		= 4 , 					//ÖĞÎ»Ğ£×¼Íê³É
+	__stKeyClick 			= 1 , 					//æŒ‰é”®æç¤ºéŸ³
+	__stMidOffSet  			= 2 , 					//å¾®è°ƒä¸­å€¼ç‚¹
+	__stExitStaticOverTime		= 3 , 					//é€€å‡ºé™æ­¢è¶…æ—¶çŠ¶æ€
+	__stMidADAdjustDown		= 4 , 					//ä¸­ä½æ ¡å‡†å®Œæˆ
 	
-	__stBindWarning 		= 5 , 					//¶ÔÂëÌáÊ¾Òô
-	__stStaticOverTimeWarning	= 6 , 					//³¬Ê±±¨¾¯
-	__stRFModelLostWarning   	= 7 , 					//ÎŞÏßÄ£¿éµôÏß±¨¾¯
-	__stThrottleHighWarning		= 8 , 					//ÓÍÃÅÒ¡¸Ë¸ßÉÏµç±¨¾¯
-	__stFastContinumWarning 	= 9 , 					//¿ìËÙÁ¬Ğø±¨¾¯(°üÀ¨ÎŞĞ£×¼Êı¾İ £¬ µÍµçÁ¿)
+	__stBindWarning 		= 5 , 					//å¯¹ç æç¤ºéŸ³
+	__stStaticOverTimeWarning	= 6 , 					//è¶…æ—¶æŠ¥è­¦
+	__stRFModelLostWarning   	= 7 , 					//æ— çº¿æ¨¡å—æ‰çº¿æŠ¥è­¦
+	__stThrottleHighWarning		= 8 , 					//æ²¹é—¨æ‘‡æ†é«˜ä¸Šç”µæŠ¥è­¦
+	__stFastContinumWarning 	= 9 , 					//å¿«é€Ÿè¿ç»­æŠ¥è­¦(åŒ…æ‹¬æ— æ ¡å‡†æ•°æ® ï¼Œ ä½ç”µé‡)
 }BeepModeTypeDef ;
 
 void beep_Init(void);

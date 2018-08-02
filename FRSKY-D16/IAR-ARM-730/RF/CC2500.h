@@ -73,16 +73,16 @@ enum
 
 enum CC2500_POWER
 {
-	CC2500_POWER_0  = 0x00,	// ¨C55dbm or less
+	CC2500_POWER_0  = 0x00,	// â€“55dbm or less
 	CC2500_POWER_1  = 0x50,	// -30dbm
-	CC2500_POWER_2  = 0x44, // ¨C28dbm
-	CC2500_POWER_3  = 0xC0, // ¨C26dbm
-	CC2500_POWER_4  = 0x84, // ¨C24dbm
-	CC2500_POWER_5  = 0x81, // ¨C22dbm
-	CC2500_POWER_6  = 0x46, // ¨C20dbm
-	CC2500_POWER_7  = 0x93, // ¨C18dbm
-	CC2500_POWER_8  = 0x55, // ¨C16dbm
-	CC2500_POWER_9  = 0x8D, // ¨C14dbm
+	CC2500_POWER_2  = 0x44, // â€“28dbm
+	CC2500_POWER_3  = 0xC0, // â€“26dbm
+	CC2500_POWER_4  = 0x84, // â€“24dbm
+	CC2500_POWER_5  = 0x81, // â€“22dbm
+	CC2500_POWER_6  = 0x46, // â€“20dbm
+	CC2500_POWER_7  = 0x93, // â€“18dbm
+	CC2500_POWER_8  = 0x55, // â€“16dbm
+	CC2500_POWER_9  = 0x8D, // â€“14dbm
 	CC2500_POWER_10 = 0xC6,	// -12dbm
 	CC2500_POWER_11 = 0x97,	// -10dbm
 	CC2500_POWER_12 = 0x6E,	//  -8dbm
@@ -93,7 +93,7 @@ enum CC2500_POWER
 	CC2500_POWER_17 = 0xFF	//  +1dbm
 };
 
-//³õÊ¼»¯ÔØ²¨ÆµÂÊ(ÆğÊ¼ÆµÂÊ)   
+//åˆå§‹åŒ–è½½æ³¢é¢‘ç‡(èµ·å§‹é¢‘ç‡)   
 #define Fre_Carrier_H  0x5c
 #define Fre_Carrier_M  0x76
 #define Fre_Carrier_L  0x27
@@ -106,25 +106,25 @@ enum CC2500_POWER
 
 // Strobe commands
 #define CC2500_SRES             0x30        // Reset chip.
-#define CC2500_SFSTXON          0x31        // Enable and calibrate frequency synthesizer (if MCSM0.FS_AUTOCAL=1).  	Èç¹û MCSM0.FS_AUTOCAL = 1 £¬ ÆôÓÃºÍĞ£×¼ÆµÂÊºÏ³ÉÆ÷¡£
-                                            // If in RX: Go to a wait state where only the synthesizer is           	Èç¹ûÔÚRX £¬ ½øÈëÖ»ÓĞºÏ³ÉÆ÷ÔËĞĞµÄµÈ´ı×´Ì¬(¿ìËÙRX/TXÇĞ»»)
+#define CC2500_SFSTXON          0x31        // Enable and calibrate frequency synthesizer (if MCSM0.FS_AUTOCAL=1).  	å¦‚æœ MCSM0.FS_AUTOCAL = 1 ï¼Œ å¯ç”¨å’Œæ ¡å‡†é¢‘ç‡åˆæˆå™¨ã€‚
+                                            // If in RX: Go to a wait state where only the synthesizer is           	å¦‚æœåœ¨RX ï¼Œ è¿›å…¥åªæœ‰åˆæˆå™¨è¿è¡Œçš„ç­‰å¾…çŠ¶æ€(å¿«é€ŸRX/TXåˆ‡æ¢)
                                             // running (for quick RX / TX turnaround).
-#define CC2500_SXOFF            0x32        // Turn off crystal oscillator.					    	¹Ø±Õ¾§ÌåÕñµ´Æ÷
-#define CC2500_SCAL             0x33        // Calibrate frequency synthesizer and turn it off				Ğ£×¼ÆµÂÊºÏ³ÉÆ÷²¢½«Æä¹Ø±Õ¡£SCAL¿ÉÒÔ´Ó¿ÕÏĞÄ£Ê½ÖĞÑ¡Í¨£¬ÉèÖÃÊÖ¶¯Ğ£×¼Ä£Ê½
+#define CC2500_SXOFF            0x32        // Turn off crystal oscillator.					    	å…³é—­æ™¶ä½“æŒ¯è¡å™¨
+#define CC2500_SCAL             0x33        // Calibrate frequency synthesizer and turn it off				æ ¡å‡†é¢‘ç‡åˆæˆå™¨å¹¶å°†å…¶å…³é—­ã€‚SCALå¯ä»¥ä»ç©ºé—²æ¨¡å¼ä¸­é€‰é€šï¼Œè®¾ç½®æ‰‹åŠ¨æ ¡å‡†æ¨¡å¼
                                             // (enables quick start).
-#define CC2500_SRX              0x34        // Enable RX. Perform calibration first if coming from IDLE and		Æô¶¯RX £¬ Èç¹ûÀ´×ÔIDLE ºÍ MCSM0.FS_AUTOCAL = 1 ÏÈ½øĞĞĞ£×¼
+#define CC2500_SRX              0x34        // Enable RX. Perform calibration first if coming from IDLE and		å¯åŠ¨RX ï¼Œ å¦‚æœæ¥è‡ªIDLE å’Œ MCSM0.FS_AUTOCAL = 1 å…ˆè¿›è¡Œæ ¡å‡†
                                             // MCSM0.FS_AUTOCAL=1.
-#define CC2500_STX              0x35        // In IDLE state: Enable TX. Perform calibration first if			ÔÚÏĞÖÃ×´Ì¬ : ÆôÓÃTX ¡£Èç¹û MCSM0.FS_AUTOCAL = 1 ,ÔòÏÈÖ´ĞĞĞ£×¼¡£Èç¹û´¦ÓÚRX×´Ì¬ ²¢ÇÒCCA±»Ê¹ÄÜ£¬½öµ±Í¨µÀÇåÁãÊ±²Å×ªµ½TXÍê³É
+#define CC2500_STX              0x35        // In IDLE state: Enable TX. Perform calibration first if			åœ¨é—²ç½®çŠ¶æ€ : å¯ç”¨TX ã€‚å¦‚æœ MCSM0.FS_AUTOCAL = 1 ,åˆ™å…ˆæ‰§è¡Œæ ¡å‡†ã€‚å¦‚æœå¤„äºRXçŠ¶æ€ å¹¶ä¸”CCAè¢«ä½¿èƒ½ï¼Œä»…å½“é€šé“æ¸…é›¶æ—¶æ‰è½¬åˆ°TXå®Œæˆ
                                             // MCSM0.FS_AUTOCAL=1. If in RX state and CCA is enabled:	
                                             // Only go to TX if channel is clear.
-#define CC2500_SIDLE            0x36        // Exit RX / TX, turn off frequency synthesizer and exit			ÍË³öRX/TX£¬¹Ø±ÕÆµÂÊºÏ³ÉÆ÷£¬Èç¹ûÊÊÓÃµÄ»°ÍË³ö ÎŞÏßµç»½ĞÑ
+#define CC2500_SIDLE            0x36        // Exit RX / TX, turn off frequency synthesizer and exit			é€€å‡ºRX/TXï¼Œå…³é—­é¢‘ç‡åˆæˆå™¨ï¼Œå¦‚æœé€‚ç”¨çš„è¯é€€å‡º æ— çº¿ç”µå”¤é†’
                                             // Wake-On-Radio mode if applicable.
 #define CC2500_SAFC             0x37        // Perform AFC adjustment of the frequency synthesizer			
-#define CC2500_SWOR             0x38        // Start automatic RX polling sequence (Wake-on-Radio)			Æô¶¯RX×Ô¶¯ÂÖÑ¯ĞòÁĞ
-#define CC2500_SPWD             0x39        // Enter power down mode when CSn goes high.				µ±CSÀ­¸ß£¬½øÈëµçÔ´¹Ø±ÕÄ£Ê½
-#define CC2500_SFRX             0x3A        // Flush the RX FIFO buffer.						Ë¢ĞÂRX»º³åÇø¡£Ö»ÔÚÏĞÖÃ»òRX FIFO»º´æÒç³ö×´Ì¬ÏÂ·¢³öSFRX¡£
-#define CC2500_SFTX             0x3B        // Flush the TX FIFO buffer.						Ë¢ĞÂTX»º³åÇø¡£Ö»ÔÚÏĞÖÃ»òTX FIFO»º´æÒç³ö×´Ì¬ÏÂ·¢³öSFRX
-#define CC2500_SWORRST          0x3C        // Reset real time clock.							ÖØĞÂÉèÖÃÊµÊ±Ê±ÖÓ£¬
+#define CC2500_SWOR             0x38        // Start automatic RX polling sequence (Wake-on-Radio)			å¯åŠ¨RXè‡ªåŠ¨è½®è¯¢åºåˆ—
+#define CC2500_SPWD             0x39        // Enter power down mode when CSn goes high.				å½“CSæ‹‰é«˜ï¼Œè¿›å…¥ç”µæºå…³é—­æ¨¡å¼
+#define CC2500_SFRX             0x3A        // Flush the RX FIFO buffer.						åˆ·æ–°RXç¼“å†²åŒºã€‚åªåœ¨é—²ç½®æˆ–RX FIFOç¼“å­˜æº¢å‡ºçŠ¶æ€ä¸‹å‘å‡ºSFRXã€‚
+#define CC2500_SFTX             0x3B        // Flush the TX FIFO buffer.						åˆ·æ–°TXç¼“å†²åŒºã€‚åªåœ¨é—²ç½®æˆ–TX FIFOç¼“å­˜æº¢å‡ºçŠ¶æ€ä¸‹å‘å‡ºSFRX
+#define CC2500_SWORRST          0x3C        // Reset real time clock.							é‡æ–°è®¾ç½®å®æ—¶æ—¶é’Ÿï¼Œ
 #define CC2500_SNOP             0x3D        // No operation. May be used to pad strobe commands to two
                                             // bytes for simpler software.
 //----------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #ifndef _FRSKYD16_H_
 #define _FRSKYD16_H_
 
-//¶¨Òå¸÷Í¨µÀÃû³Æ(×î´óÖ§³Ö8Í¨µÀ)
+//å®šä¹‰å„é€šé“åç§°(æœ€å¤§æ”¯æŒ8é€šé“)
 typedef enum
 {
   	RUDDER   	= 0 , 
@@ -31,9 +31,9 @@ enum TXRX_State
 
 extern bool CommunicationError_flg ;
 
-#define RF_TypeVersion		  0x46						//Ò£¿ØÆ÷ÀàĞÍ 'F' -> FRSKYD16
-#define MasterInitProtocolVersion 0x01						//ÎŞÏßĞ­Òé°æ±¾ºÅ
-#define PTOTOCOL_MAX_CHANNEL      8						//Ğ­ÒéÖ§³Ö×î´ó·¢ËÍÍ¨µÀ 8 Í¨µÀ(¹Ì¶¨·¢ËÍ16Í¨µÀÊı¾İ)
+#define RF_TypeVersion		  0x46						//é¥æ§å™¨ç±»å‹ 'F' -> FRSKYD16
+#define MasterInitProtocolVersion 0x01						//æ— çº¿åè®®ç‰ˆæœ¬å·
+#define PTOTOCOL_MAX_CHANNEL      8						//åè®®æ”¯æŒæœ€å¤§å‘é€é€šé“ 8 é€šé“(å›ºå®šå‘é€16é€šé“æ•°æ®)
 #define TRANSMITTER_CHANNEL       8
 
 extern bool CommunicationError_flg ; 
@@ -41,7 +41,7 @@ extern bool HighThrottle_flg ;
 extern bool Bind_flg ; 
 extern uint16_t TransmitterID ; 
 ////////////////////////////////////////////////////////////////////////////////
-//SFHSS 8Í¨ ÎŞÏßÊı¾İ·¢ËÍÊı¾İ
+//SFHSS 8é€š æ— çº¿æ•°æ®å‘é€æ•°æ®
 ////////////////////////////////////////////////////////////////////////////////
 extern uint16_t FRSKYD16_SendDataBuff[16];
 extern const uint8_t FRSKYD16_CH_Code[16];

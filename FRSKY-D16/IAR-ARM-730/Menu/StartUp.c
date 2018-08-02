@@ -1,8 +1,8 @@
 #include "include.h"
 
-#define OVERTIME_MAX 15 	//Ò£¿ØÆ÷¾²Ö¹³¬¹ı 15Min ±¨¾¯
+#define OVERTIME_MAX 15 	//é¥æ§å™¨é™æ­¢è¶…è¿‡ 15Min æŠ¥è­¦
 
-//Ò¡¸ËÓ³ÉäÇúÏß
+//æ‘‡æ†æ˜ å°„æ›²çº¿
 const uint16_t OutputCode[420] = 
 {
 /*   	0   , 0   , 0   , 0   , 0   , 0   , 0   , 0   , 0   , 0   , 0   , 0   , 0   , 0   , 0   , 0   , 0   , 0   , 0   , 0   , 
@@ -30,7 +30,7 @@ const uint16_t OutputCode[420] =
   
   
           //////////////////////////////////////////////////////////////////////////////////////////
-          ///////// ÏÂÃæÊÇ11ÔÂ18ÈÕĞÂÓÅ»¯µÄÇúÏß£¬ËõĞ¡ÁËÇúÂÊ
+          ///////// ä¸‹é¢æ˜¯11æœˆ18æ—¥æ–°ä¼˜åŒ–çš„æ›²çº¿ï¼Œç¼©å°äº†æ›²ç‡
           //////////////////////////////////////////////////////////////////////////////////////////
           0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
 	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
@@ -56,11 +56,11 @@ const uint16_t OutputCode[420] =
 
 };
 
-uint8_t  ChannelInversion_flg = 0x00 ; 	//Í¨µÀ·´Ïò±êÖ¾Î»(ÎïÀí²ÉÑùÕı³£¼ÆËã£¬·¢ËÍÊ±·´Ïò)
-//Ò¡¸ËÏà¹Ø±äÁ¿
-//×î´ó 12 - CH                    RUD        /  THR   / ELE       /     ALL    /   Gear    /   Aux1    /   Aux2    /   Aux3    /   Aux4    /   Aux5    /   Aux6    /   Aux7  
+uint8_t  ChannelInversion_flg = 0x00 ; 	//é€šé“åå‘æ ‡å¿—ä½(ç‰©ç†é‡‡æ ·æ­£å¸¸è®¡ç®—ï¼Œå‘é€æ—¶åå‘)
+//æ‘‡æ†ç›¸å…³å˜é‡
+//æœ€å¤§ 12 - CH                    RUD        /  THR   / ELE       /     ALL    /   Gear    /   Aux1    /   Aux2    /   Aux3    /   Aux4    /   Aux5    /   Aux6    /   Aux7  
 uint16_t Sampling_Data[12]  = {  Input_Mid  ,   0 ,  Input_Mid   , Input_Mid  , Input_Mid , Input_Mid , Input_Mid , Input_Mid , Input_Mid , Input_Mid , Input_Mid , Input_Mid};	
-//ËÄÒ¡¸ËÏà¹Ø±äÁ¿(×î´ó¡¢×îĞ¡¡¢ÖĞÎ»Öµ)
+//å››æ‘‡æ†ç›¸å…³å˜é‡(æœ€å¤§ã€æœ€å°ã€ä¸­ä½å€¼)
 uint16_t Sampling_MaxMinData[4][3] = 
 {
 	{Input_Max , Input_Mid , Input_Min},
@@ -68,10 +68,10 @@ uint16_t Sampling_MaxMinData[4][3] =
 	{Input_Max , Input_Mid , Input_Min},
 	{Input_Max , Input_Mid , Input_Min},
 };
-uint8_t  Sampling_Offset[4] = {50   , 50   , 50   , 50};			//ËÄÒ¡¸ËÆ«ÖÃÖµ(0-100)
+uint8_t  Sampling_Offset[4] = {50   , 50   , 50   , 50};			//å››æ‘‡æ†åç½®å€¼(0-100)
  
 //==============================================================================
-//Í¨¹ı²ÉÑùÖµ£¬»»Ëã·¢ËÍÖµ
+//é€šè¿‡é‡‡æ ·å€¼ï¼Œæ¢ç®—å‘é€å€¼
 //==============================================================================
 uint16_t Get_SendValue(ChannelTypeDef Channel)
 {
@@ -79,66 +79,66 @@ uint16_t Get_SendValue(ChannelTypeDef Channel)
 	uint16_t OutputTemp = 0 ; 
 	
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//!!!!!!!!Ö»ÓĞÈı¸öÒ¡¸ËÊı¾İĞèÒªºÍÖĞÎ»Öµ¼ÆËã(³ıÓÍÃÅÊı¾İÍâ)!!!!!!!!!!!!!!!!
-	//!!!!!!!!!!!!!!!!!!!Ç§Íò×¢Òâ£¬ÖĞÎ»Êı×é±ğÔ½½ç!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	//!!!!!!!!åªæœ‰ä¸‰ä¸ªæ‘‡æ†æ•°æ®éœ€è¦å’Œä¸­ä½å€¼è®¡ç®—(é™¤æ²¹é—¨æ•°æ®å¤–)!!!!!!!!!!!!!!!!
+	//!!!!!!!!!!!!!!!!!!!åƒä¸‡æ³¨æ„ï¼Œä¸­ä½æ•°ç»„åˆ«è¶Šç•Œ!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	if((Channel == RUDDER) || (Channel == ELEVATOR) || (Channel == AILERON))
 	{	
-	  	//ÅĞ¶Ï±ê¶¨¼«ÖµÖµ·¶Î§£¬·ÀÖ¹³ıÊıµÈÓÚÁãµÄÇé¿ö
+	  	//åˆ¤æ–­æ ‡å®šæå€¼å€¼èŒƒå›´ï¼Œé˜²æ­¢é™¤æ•°ç­‰äºé›¶çš„æƒ…å†µ
 	  	if(Sampling_MaxMinData[Channel][MAXDAT] < MAXValue_Min)         Sampling_MaxMinData[Channel][MAXDAT] = MAXValue_Min ; 
 		if(Sampling_MaxMinData[Channel][MINDAT] > MINValue_Max)         Sampling_MaxMinData[Channel][MINDAT] = MINValue_Max ; 
 	  	if(Sampling_MaxMinData[Channel][MIDDAT] > AD_MidValue_Max)      Sampling_MaxMinData[Channel][MIDDAT] = AD_MidValue_Max ; 
 		else if(Sampling_MaxMinData[Channel][MIDDAT] < AD_MidValue_Min) Sampling_MaxMinData[Channel][MIDDAT] = AD_MidValue_Min ; 
 		
-		//ÏŞ¶¨²ÉÑùADÓĞĞ§·¶Î§(±ê¶¨×îĞ¡Öµ - ±ê¶¨×î´óÖµ)
+		//é™å®šé‡‡æ ·ADæœ‰æ•ˆèŒƒå›´(æ ‡å®šæœ€å°å€¼ - æ ‡å®šæœ€å¤§å€¼)
 		if(Sampling_Data[Channel] > Sampling_MaxMinData[Channel][MAXDAT])     ADTemp = Sampling_MaxMinData[Channel][MAXDAT] ; 
 		else if(Sampling_Data[Channel] < Sampling_MaxMinData[Channel][MINDAT])ADTemp = Sampling_MaxMinData[Channel][MINDAT] ; 
 		else								      ADTemp = Sampling_Data[Channel] ; 
 		
-		//½«Èı¸öÒ¡¸ËÊä³öÊı¾İ×öÏŞ·ù´¦Àí(ÉÏÏÂ·ùÖµ¸÷¿³ 100)
+		//å°†ä¸‰ä¸ªæ‘‡æ†è¾“å‡ºæ•°æ®åšé™å¹…å¤„ç†(ä¸Šä¸‹å¹…å€¼å„ç  100)
 	  	if(ADTemp >= Sampling_MaxMinData[Channel][MIDDAT]) { OutputTemp = Output_Mid + (uint16_t)((ADTemp - Sampling_MaxMinData[Channel][MIDDAT]) * (((float)(Output_Max - Output_Mid - 100))/(Sampling_MaxMinData[Channel][MAXDAT] - Sampling_MaxMinData[Channel][MIDDAT])) + 0.5f) ; }
 		else { OutputTemp = Output_Mid - (uint16_t)((Sampling_MaxMinData[Channel][MIDDAT] - ADTemp) * (((float)(Output_Mid - Output_Min - 100))/(Sampling_MaxMinData[Channel][MIDDAT] - Sampling_MaxMinData[Channel][MINDAT])) + 0.5f)  ; }
 		
-		//²é±í»»ËãÇ°£¬¼ì²éÊı¾İ·¶Î§·ÀÖ¹Ô½½ç(²é±í·¶Î§²»ÄÜ³¬¹ı412)
+		//æŸ¥è¡¨æ¢ç®—å‰ï¼Œæ£€æŸ¥æ•°æ®èŒƒå›´é˜²æ­¢è¶Šç•Œ(æŸ¥è¡¨èŒƒå›´ä¸èƒ½è¶…è¿‡412)
 		if(OutputTemp > (Output_Max - 100)) OutputTemp = (Output_Max - 100) ; 
 		if(OutputTemp < (Output_Min + 100)) OutputTemp = (Output_Min + 100) ;
 		if(OutputTemp > Output_Mid) OutputTemp = OutputCode[OutputTemp - Output_Mid] + Output_Mid;
 		else		            OutputTemp = Output_Mid - OutputCode[Output_Mid - OutputTemp];
 		
-		//¼ÆËãÆ«ÖÃÇé¿ö
+		//è®¡ç®—åç½®æƒ…å†µ
 		if(Sampling_Offset[Channel] > 100)   Sampling_Offset[Channel] = 100 ;
 		OutputTemp += Sampling_Offset[Channel] * 2 ; 
-		//·ÀÖ¹Êı¾İ¼õÍêĞ¡ÓÚ 100 
+		//é˜²æ­¢æ•°æ®å‡å®Œå°äº 100 
 		if(OutputTemp > 200) OutputTemp -= 100 ;
 		else OutputTemp = 100 ; 
 		
-		//ÔÙ´Î¼ì²é·¢ÉäÊı¾İ·¶Î§
+		//å†æ¬¡æ£€æŸ¥å‘å°„æ•°æ®èŒƒå›´
 		if(OutputTemp > (Output_Max - 100)) OutputTemp = (Output_Max - 100); 
 		if(OutputTemp < (Output_Min + 100)) OutputTemp = (Output_Min + 100) ;
 		
 	}
 	
-	//ÆäËûÃ»ÓĞÖĞÎ»ÖµµÄÍ¨µÀ£¬Õı³£¼ÆËã 
+	//å…¶ä»–æ²¡æœ‰ä¸­ä½å€¼çš„é€šé“ï¼Œæ­£å¸¸è®¡ç®— 
 	else
 	{
 		
 		if(Channel == THROTTLE)
 		{
-		  	//ÅĞ¶Ï±ê¶¨¼«ÖµÖµ·¶Î§£¬·ÀÖ¹³ıÊıµÈÓÚÁãµÄÇé¿ö
+		  	//åˆ¤æ–­æ ‡å®šæå€¼å€¼èŒƒå›´ï¼Œé˜²æ­¢é™¤æ•°ç­‰äºé›¶çš„æƒ…å†µ
 	  		if(Sampling_MaxMinData[Channel][MAXDAT] < MAXValue_Min)         Sampling_MaxMinData[Channel][MAXDAT] = MAXValue_Min ; 
 			if(Sampling_MaxMinData[Channel][MINDAT] > MINValue_Max)         Sampling_MaxMinData[Channel][MINDAT] = MINValue_Max ;
-			//ÏŞ¶¨²ÉÑùADÓĞĞ§·¶Î§(±ê¶¨×îĞ¡Öµ - ±ê¶¨×î´óÖµ)
+			//é™å®šé‡‡æ ·ADæœ‰æ•ˆèŒƒå›´(æ ‡å®šæœ€å°å€¼ - æ ‡å®šæœ€å¤§å€¼)
 			if(Sampling_Data[Channel] > Sampling_MaxMinData[Channel][MAXDAT])       ADTemp = Sampling_MaxMinData[Channel][MAXDAT] ; 
 			else if(Sampling_Data[Channel] < Sampling_MaxMinData[Channel][MINDAT])  ADTemp = Sampling_MaxMinData[Channel][MINDAT] ;
 			else								        ADTemp = Sampling_Data[Channel] ; 
 		  	OutputTemp = (uint16_t)((ADTemp- Sampling_MaxMinData[Channel][MINDAT]) * ((float)(THR_Output_Max - THR_Output_Min)/(Sampling_MaxMinData[Channel][MAXDAT] - Sampling_MaxMinData[Channel][MINDAT]))+ 0.5f) + THR_Output_Min ;
-			//¼ÓÉÏÆ«ÖÃÖµ
+			//åŠ ä¸Šåç½®å€¼
 			if(Sampling_Offset[Channel] > 100)   Sampling_Offset[Channel] = 100 ;
 			OutputTemp += Sampling_Offset[Channel] * 2 ; 
 			if(OutputTemp > 100) OutputTemp -= 100 ;
 			else OutputTemp = 0 ; 
 			
-			//ÓÍÃÅÏŞ·ù
+			//æ²¹é—¨é™å¹…
 			if(OutputTemp > THR_Output_Max) OutputTemp = THR_Output_Max ; 
 			if(OutputTemp < THR_Output_Min) OutputTemp = THR_Output_Min ;
 		}
@@ -148,13 +148,13 @@ uint16_t Get_SendValue(ChannelTypeDef Channel)
 		}
 	}
 	
-	//ÊÇ·ñĞèÒª·´Ïò
+	//æ˜¯å¦éœ€è¦åå‘
 	if((Channel < 6) && (ChannelInversion_flg & (1<<Channel)))
 	{
 		 OutputTemp = 2*Output_Mid - OutputTemp;
 	}
 	//======================================================================
-	//	         ·ÀÖ¹Êı¾İ³¬¹ı×î´óÖµ
+	//	         é˜²æ­¢æ•°æ®è¶…è¿‡æœ€å¤§å€¼
 	//======================================================================
 	if(OutputTemp > Output_Max) OutputTemp = Output_Max ; 
 	if(OutputTemp < Output_Min) OutputTemp = Output_Min ; 
@@ -163,13 +163,13 @@ uint16_t Get_SendValue(ChannelTypeDef Channel)
 }
 
 
-//ONOFF_flg : ´ò¿ª¹Ø±ÕÍ¨µÀÏÔÊ¾
-//true : µ±Ç°ÏÔÊ¾Ò£¿ØÆ÷Í¨µÀ     false : ÇåÁãLEDÏÔÊ¾£¬·½±ãÓÃÓÚ±¨¾¯ÏÔÊ¾
+//ONOFF_flg : æ‰“å¼€å…³é—­é€šé“æ˜¾ç¤º
+//true : å½“å‰æ˜¾ç¤ºé¥æ§å™¨é€šé“     false : æ¸…é›¶LEDæ˜¾ç¤ºï¼Œæ–¹ä¾¿ç”¨äºæŠ¥è­¦æ˜¾ç¤º
 void Init_ChannelDis(bool ONOFF_flg)
 {
   	LED_State_ON 	&= LED_NONE ; 
 	LED_State_Shake &= LED_NONE ; 
-  	//ÏÔÊ¾µ±Ç°Í¨µÀµµÎ»
+  	//æ˜¾ç¤ºå½“å‰é€šé“æ¡£ä½
 	if(ONOFF_flg == true)
 	{
 		if(Sampling_Data[AUX1]      >= ADC_AUX_HIGH) 	{LED_State_ON &= ~(LED_CH5_M|LED_CH5_L) ; LED_State_ON |= LED_CH5_H ;}
@@ -182,14 +182,14 @@ void Init_ChannelDis(bool ONOFF_flg)
 }
 
 //==============================================================================
-//ÉèÖÃÎ¢µ÷²ÎÊı
+//è®¾ç½®å¾®è°ƒå‚æ•°
 //==============================================================================
 void SetOffSet(void)
 {
 	////////////////////////////////////////////////////////////////////////
-	////////			Æ«ÖÃÎ¢µ÷			////////
+	////////			åç½®å¾®è°ƒ			////////
 	////////////////////////////////////////////////////////////////////////
-  	if(OffSetKeyValue == __stKey_R_Plus)					//RUDDER Æ«ÖÃ ¼Ó
+  	if(OffSetKeyValue == __stKey_R_Plus)					//RUDDER åç½® åŠ 
 	{
 		if(Sampling_Offset[RUDDER] < 100) ++Sampling_Offset[RUDDER] ; 
 		else Sampling_Offset[RUDDER] = 100 ; 
@@ -206,7 +206,7 @@ void SetOffSet(void)
 		} 
 		Write_EE_Byte(Sampling_Offset[RUDDER]   , RUD_OFFSET_ADDR);
 	}
-	else if(OffSetKeyValue == __stKey_R_Sub)				//RUDDER Æ«ÖÃ ¼õ
+	else if(OffSetKeyValue == __stKey_R_Sub)				//RUDDER åç½® å‡
 	{
 		if(Sampling_Offset[RUDDER]) --Sampling_Offset[RUDDER] ; 
 		
@@ -223,7 +223,7 @@ void SetOffSet(void)
 		Write_EE_Byte(Sampling_Offset[RUDDER]   , RUD_OFFSET_ADDR);
 	}
   
-  	else if(OffSetKeyValue == __stKey_T_Plus)				//THROTTLE Æ«ÖÃ ¼Ó
+  	else if(OffSetKeyValue == __stKey_T_Plus)				//THROTTLE åç½® åŠ 
 	{
 		if(Sampling_Offset[THROTTLE] < 100) ++Sampling_Offset[THROTTLE] ; 
 		else Sampling_Offset[THROTTLE] = 100 ; 
@@ -240,7 +240,7 @@ void SetOffSet(void)
 		}
 		Write_EE_Byte(Sampling_Offset[THROTTLE]   , THR_OFFSET_ADDR);
 	}
-	else if(OffSetKeyValue == __stKey_T_Sub)				//THROTTLE Æ«ÖÃ ¼õ
+	else if(OffSetKeyValue == __stKey_T_Sub)				//THROTTLE åç½® å‡
 	{
 		if(Sampling_Offset[THROTTLE]) --Sampling_Offset[THROTTLE] ; 
 		
@@ -257,7 +257,7 @@ void SetOffSet(void)
 		Write_EE_Byte(Sampling_Offset[THROTTLE]   , THR_OFFSET_ADDR);
 	}
 	
-  	else if(OffSetKeyValue == __stKey_E_Plus)				//ELEVATOR Æ«ÖÃ ¼Ó
+  	else if(OffSetKeyValue == __stKey_E_Plus)				//ELEVATOR åç½® åŠ 
 	{
 		if(Sampling_Offset[ELEVATOR] < 100) ++Sampling_Offset[ELEVATOR] ; 
 		else Sampling_Offset[ELEVATOR] = 100 ; 
@@ -274,7 +274,7 @@ void SetOffSet(void)
 		}
 		Write_EE_Byte(Sampling_Offset[ELEVATOR]   , ELE_OFFSET_ADDR);
 	}
-	else if(OffSetKeyValue == __stKey_E_Sub)				//ELEVATOR Æ«ÖÃ ¼õ
+	else if(OffSetKeyValue == __stKey_E_Sub)				//ELEVATOR åç½® å‡
 	{
 		if(Sampling_Offset[ELEVATOR]) --Sampling_Offset[ELEVATOR] ; 
 		
@@ -291,7 +291,7 @@ void SetOffSet(void)
 		Write_EE_Byte(Sampling_Offset[ELEVATOR]   , ELE_OFFSET_ADDR);
 	}
 	
-  	else if(OffSetKeyValue == __stKey_A_Plus)				//AILERON Æ«ÖÃ ¼Ó
+  	else if(OffSetKeyValue == __stKey_A_Plus)				//AILERON åç½® åŠ 
 	{
 		if(Sampling_Offset[AILERON] < 100) ++Sampling_Offset[AILERON] ; 
 		else Sampling_Offset[AILERON] = 100 ; 
@@ -308,7 +308,7 @@ void SetOffSet(void)
 		}
 		Write_EE_Byte(Sampling_Offset[AILERON]   , AIL_OFFSET_ADDR);
 	}
-	else if(OffSetKeyValue == __stKey_A_Sub)				//AILERON Æ«ÖÃ ¼õ
+	else if(OffSetKeyValue == __stKey_A_Sub)				//AILERON åç½® å‡
 	{
 		if(Sampling_Offset[AILERON]) --Sampling_Offset[AILERON] ; 
 		
@@ -326,23 +326,23 @@ void SetOffSet(void)
 	}
 }
 
-//¾²Ö¹³¬Ê±ÅĞ¶Ï
+//é™æ­¢è¶…æ—¶åˆ¤æ–­
 void StaticOverTime(void)
 {
-	//±£´æÉÏ´ÎÒ¡¸ËAD²ÉÑùÖµ£¬ºÍµ±Ç°AD±È¶Ô£¬Èç¹û±ä»¯´óÓÚ40/60£¬¸üĞÂ(ÇåÁã¾²Ö¹¼ÆÊ±)¡£·ñÔò²»±ä
+	//ä¿å­˜ä¸Šæ¬¡æ‘‡æ†ADé‡‡æ ·å€¼ï¼Œå’Œå½“å‰ADæ¯”å¯¹ï¼Œå¦‚æœå˜åŒ–å¤§äº40/60ï¼Œæ›´æ–°(æ¸…é›¶é™æ­¢è®¡æ—¶)ã€‚å¦åˆ™ä¸å˜
   	static uint16_t Sampling_HSK_AD_LastValue[5] ; 
 	static uint8_t  AUX3AUX4_LastState = 0 ; 
-	//¾²Ö¹³¬Ê±¼ÆÊı
+	//é™æ­¢è¶…æ—¶è®¡æ•°
 	static uint16_t StaticOverTime_Secondcnt = 0 ; 
 	static uint8_t  StaticOverTime_Mincnt	 = 0 ;
 	
 	uint16_t Temp = 0 ; 
-	//±È½ÏÒ¡¸Ë5¸öADÖµ
+	//æ¯”è¾ƒæ‘‡æ†5ä¸ªADå€¼
 	for(uint8_t i = 0 ; i<5 ; i++)
 	{	
 	  	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	  	//!!!!!!!!!!!!! Ö»Ğè±È½ÏËÄ¸öÒ¡¸ËºÍÒ»¸öµçÎ»Æ÷ADÖµ!!!!!!!!!!!!!!!!
-	  	//!!!!!!!!!!!!!!!!!!!!!!!×¢ÒâÊı×éÔ½½ç!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	  	//!!!!!!!!!!!!! åªéœ€æ¯”è¾ƒå››ä¸ªæ‘‡æ†å’Œä¸€ä¸ªç”µä½å™¨ADå€¼!!!!!!!!!!!!!!!!
+	  	//!!!!!!!!!!!!!!!!!!!!!!!æ³¨æ„æ•°ç»„è¶Šç•Œ!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	  	if(i < 4)
 		{
 			if(Sampling_HSK_AD_LastValue[i] > Sampling_Data[i]) Temp = Sampling_HSK_AD_LastValue[i] - Sampling_Data[i] ; 
@@ -355,34 +355,34 @@ void StaticOverTime(void)
 		}
 		
 		//==============================================================
-		//(1)ÔÚÃ»ÓĞ±¨¾¯Ç°£¬AD±ä»¯Ğ¡ÓÚ40 ÈÏÎªÊÇ¾²Ö¹¡£
-		//(2)¾²Ö¹³¬Ê±±¨¾¯ºó£¬AD±ä»¯Ğ¡ÓÚ 60 ²ÅÈÏÎªÊÇ¾²Ö¹(¿¼ÂÇµ½·äÃùÆ÷±¨¾¯Ê±ÓĞÕğ¶¯£¬µ¼ÖÂAD±ä»¯¼Ó´ó)
+		//(1)åœ¨æ²¡æœ‰æŠ¥è­¦å‰ï¼ŒADå˜åŒ–å°äº40 è®¤ä¸ºæ˜¯é™æ­¢ã€‚
+		//(2)é™æ­¢è¶…æ—¶æŠ¥è­¦åï¼ŒADå˜åŒ–å°äº 60 æ‰è®¤ä¸ºæ˜¯é™æ­¢(è€ƒè™‘åˆ°èœ‚é¸£å™¨æŠ¥è­¦æ—¶æœ‰éœ‡åŠ¨ï¼Œå¯¼è‡´ADå˜åŒ–åŠ å¤§)
 		//==============================================================
 		if(((RunStatus != __stStaTimeOver) && (Temp > 40))||((RunStatus == __stStaTimeOver)&&(Temp > 60)))
 		{
 			StaticOverTime_Secondcnt = 0 ; StaticOverTime_Mincnt = 0 ;
-			if(i < 4) Sampling_HSK_AD_LastValue[i] = Sampling_Data[i] ; 	 //¸üĞÂADÖµ
-			else 	  Sampling_HSK_AD_LastValue[4] = Sampling_Data[AUX3] ;   //¸üĞÂADÖµ
+			if(i < 4) Sampling_HSK_AD_LastValue[i] = Sampling_Data[i] ; 	 //æ›´æ–°ADå€¼
+			else 	  Sampling_HSK_AD_LastValue[4] = Sampling_Data[AUX3] ;   //æ›´æ–°ADå€¼
 		}
 	}
 	
-	//ÅĞ¶ÏÊÇ·ñÓĞ°´¼ü °´ÏÂ
+	//åˆ¤æ–­æ˜¯å¦æœ‰æŒ‰é”® æŒ‰ä¸‹
 	if((ChannelKeyValue != __stEmpty_Key) || (OffSetKeyValue != __stOffset_EmptyKey))
 	{
 		StaticOverTime_Secondcnt = 0 ; StaticOverTime_Mincnt = 0 ;
 	}
 	
-	//ÅĞ¶ÏÊÇ·ñ¸Ä±äÁË AUX3 AUX4µÄ²¦ÂëÎ»ÖÃ
+	//åˆ¤æ–­æ˜¯å¦æ”¹å˜äº† AUX3 AUX4çš„æ‹¨ç ä½ç½®
 	if(AUX3AUX4_LastState != (GPIOG -> IDR & ((1<<2)|(1<<3))))
 	{
 	  	StaticOverTime_Secondcnt = 0 ; StaticOverTime_Mincnt = 0 ;
 		AUX3AUX4_LastState = (GPIOG -> IDR & ((1<<2)|(1<<3))) ; 
 	}
 	
-	//Ò£¿ØÆ÷¾²Ö¹³¬¹ı 15Min Ò£¿ØÆ÷±¨¾¯
+	//é¥æ§å™¨é™æ­¢è¶…è¿‡ 15Min é¥æ§å™¨æŠ¥è­¦
 	if(StaticOverTime_Mincnt >= OVERTIME_MAX)
 	{
-	  	//ÖÃÎ»Ç°ĞèÒªÅĞ¶Ï µ±Ç°±¨¾¯×´Ì¬ÓÅÏÈ¼¶ ÊÇ·ñµÍÓÚ ¾²Ö¹³¬Ê±±¨¾¯
+	  	//ç½®ä½å‰éœ€è¦åˆ¤æ–­ å½“å‰æŠ¥è­¦çŠ¶æ€ä¼˜å…ˆçº§ æ˜¯å¦ä½äº é™æ­¢è¶…æ—¶æŠ¥è­¦
 		if(RunStatus < __stStaTimeOver) 
 		{
 			RunStatus = __stStaTimeOver ;
@@ -403,18 +403,18 @@ void StaticOverTime(void)
 	
 }
 
-//³õÊ¼»¯¼ì²âÆô¶¯Ê±µÄÓÍÃÅÎ»ÖÃ(ÓÍÃÅ·¢ËÍÖµ´óÓÚ µç»úÆğ×ªµã£¬²»·¢ËÍ£¬²¢±¨¾¯)
+//åˆå§‹åŒ–æ£€æµ‹å¯åŠ¨æ—¶çš„æ²¹é—¨ä½ç½®(æ²¹é—¨å‘é€å€¼å¤§äº ç”µæœºèµ·è½¬ç‚¹ï¼Œä¸å‘é€ï¼Œå¹¶æŠ¥è­¦)
 static void ST_Init(void)
 {
-	//Æô¶¯Ê± ÓÍÃÅ·¢ËÍÊı¾İ ±ØĞëĞ¡ÓÚ µçµ÷Æğ×ªµã(ĞèÒª×¢ÒâÃÀ¹úÊÖ/ÈÕ±¾ÊÖ  ÕıÏò/·´Ïò µÄÇø±ğ) 
+	//å¯åŠ¨æ—¶ æ²¹é—¨å‘é€æ•°æ® å¿…é¡»å°äº ç”µè°ƒèµ·è½¬ç‚¹(éœ€è¦æ³¨æ„ç¾å›½æ‰‹/æ—¥æœ¬æ‰‹  æ­£å‘/åå‘ çš„åŒºåˆ«) 
   	uint16_t THR_Temp = Get_SendValue(THROTTLE) ; 
 	if((!(ChannelInversion_flg & (1<<THROTTLE))&&(Get_SendValue(THROTTLE) < (Output_Min + ESC_StartUp_Value))) 
 	 ||((ChannelInversion_flg & (1<<THROTTLE))&&(Get_SendValue(THROTTLE)  > (Output_Max - ESC_StartUp_Value))))
 	{
-	  	HighThrottle_flg = false ; 					//ÇåÁã¸ßÓÍÃÅÉÏµç±êÖ¾Î»(¸ßÓÍÃÅÉÏµç±êÖ¾Î»ÖÃ 1 Ê±£¬ÎŞÏß·¢ËÍ³õÊ¼Êı¾İ)
+	  	HighThrottle_flg = false ; 					//æ¸…é›¶é«˜æ²¹é—¨ä¸Šç”µæ ‡å¿—ä½(é«˜æ²¹é—¨ä¸Šç”µæ ‡å¿—ä½ç½® 1 æ—¶ï¼Œæ— çº¿å‘é€åˆå§‹æ•°æ®)
 		MenuCtrl.Sub_RunStep = 1 ; 
 
-		//Ö»ÔÚÕı³£×´Ì¬ÊÇÓĞ·äÃùÆ÷ÌáÊ¾(·ÀÖ¹¸²¸ÇÆäËû±¨¾¯×´Ì¬)
+		//åªåœ¨æ­£å¸¸çŠ¶æ€æ˜¯æœ‰èœ‚é¸£å™¨æç¤º(é˜²æ­¢è¦†ç›–å…¶ä»–æŠ¥è­¦çŠ¶æ€)
 		if((RunStatus == __stNormal) || (RunStatus == __stTHR_err))  
 		{
 			if(Bind_flg == false) beepCmd(PowerOnFreCounts , __stMidOffSet) ;
@@ -432,9 +432,9 @@ static void ST_Init(void)
 	}
 	else
 	{
-		//ÓÍÃÅÒ¡¸Ë¸ß ±¨¾¯
+		//æ²¹é—¨æ‘‡æ†é«˜ æŠ¥è­¦
 	  	HighThrottle_flg = true ; 
-	  	if(RunStatus < __stTHR_err) //¸üĞÂ×´Ì¬Ç°£¬ĞèÒªÅĞ¶Ï×´Ì¬µÈ¼¶¡£µÍ×´Ì¬µÈ¼¶²»ÄÜ¸²¸Ç¸ß×´Ì¬µÈ¼¶
+	  	if(RunStatus < __stTHR_err) //æ›´æ–°çŠ¶æ€å‰ï¼Œéœ€è¦åˆ¤æ–­çŠ¶æ€ç­‰çº§ã€‚ä½çŠ¶æ€ç­‰çº§ä¸èƒ½è¦†ç›–é«˜çŠ¶æ€ç­‰çº§
 		{
 		  	beepCmd(NormalFreCounts , __stThrottleHighWarning) ;
 			RunStatus = __stTHR_err ; 
@@ -443,21 +443,21 @@ static void ST_Init(void)
 }
 
 /*******************************************************************************
-³õÊ¼»¯Íê³É£¬¿ªÊ¼Õı³£¹¤×÷
-(1) Í¨µÀµ÷Õû : ÆäÓàËÄ·½Í¨µÀ¿ÉÒÔÍ¨¹ı°´¼üÉèÖÃ
+åˆå§‹åŒ–å®Œæˆï¼Œå¼€å§‹æ­£å¸¸å·¥ä½œ
+(1) é€šé“è°ƒæ•´ : å…¶ä½™å››æ–¹é€šé“å¯ä»¥é€šè¿‡æŒ‰é”®è®¾ç½®
 *******************************************************************************/
 static void ST_StartWork(void)
 {
 	////////////////////////////////////////////////////////////////////////
-	////////			Í¨µÀµ÷Õû			////////
-  	//×¢Òâ : AUX1(1200/1800 -> ADÖµ850/3253)   AUX2(1200 / 1500 / 1800 -> ADÖµ 850 / 2052 / 3253)
+	////////			é€šé“è°ƒæ•´			////////
+  	//æ³¨æ„ : AUX1(1200/1800 -> ADå€¼850/3253)   AUX2(1200 / 1500 / 1800 -> ADå€¼ 850 / 2052 / 3253)
 	////////////////////////////////////////////////////////////////////////
 	if(ChannelKeyValue == __stKey_CH5_Up)	//CH5_UP(1200 / 1800)
 	{
 	 	if(RunStatus == __stNormal) beepCmd(NormalFreCounts , __stKeyClick);
 		
 		Sampling_Data[AUX1] = ADC_AUX_HIGH ;  LED_State_ON &= ~(LED_CH5_M|LED_CH5_L) ; LED_State_ON |= LED_CH5_H ; 
-		//F**K , ÒòÎª RWW Ö»Ö§³Öµ¥×Ö½Ú²Ù×÷(µ¥×Ö½Ú¶ÁĞ´£¬²»Ó°Ïìµ¥Æ¬»úÆäËû²Ù×÷£¬ËùÒÔ°ÑÊı¾İ²ğ·Ö³ÉÁ½¸öµ¥×Ö½ÚÊı¾İÀ´²Ù×÷)
+		//F**K , å› ä¸º RWW åªæ”¯æŒå•å­—èŠ‚æ“ä½œ(å•å­—èŠ‚è¯»å†™ï¼Œä¸å½±å“å•ç‰‡æœºå…¶ä»–æ“ä½œï¼Œæ‰€ä»¥æŠŠæ•°æ®æ‹†åˆ†æˆä¸¤ä¸ªå•å­—èŠ‚æ•°æ®æ¥æ“ä½œ)
 		Write_EE_Byte((Sampling_Data[AUX1] >> 8)   , AUX1VALUE_ADDR);
 		Write_EE_Byte((Sampling_Data[AUX1] & 0xFF) , AUX1VALUE_ADDR + 1);
 	}
@@ -466,7 +466,7 @@ static void ST_StartWork(void)
 		if(RunStatus == __stNormal) beepCmd(NormalFreCounts , __stKeyClick);
 		
 		Sampling_Data[AUX1] = ADC_AUX_LOW ; LED_State_ON &= ~(LED_CH5_H|LED_CH5_M) ; LED_State_ON |= LED_CH5_L ; 
-		//F**K , ÒòÎª RWW Ö»Ö§³Öµ¥×Ö½Ú²Ù×÷(µ¥×Ö½Ú¶ÁĞ´£¬²»Ó°Ïìµ¥Æ¬»úÆäËû²Ù×÷£¬ËùÒÔ°ÑÊı¾İ²ğ·Ö³ÉÁ½¸öµ¥×Ö½ÚÊı¾İÀ´²Ù×÷)
+		//F**K , å› ä¸º RWW åªæ”¯æŒå•å­—èŠ‚æ“ä½œ(å•å­—èŠ‚è¯»å†™ï¼Œä¸å½±å“å•ç‰‡æœºå…¶ä»–æ“ä½œï¼Œæ‰€ä»¥æŠŠæ•°æ®æ‹†åˆ†æˆä¸¤ä¸ªå•å­—èŠ‚æ•°æ®æ¥æ“ä½œ)
 		Write_EE_Byte((Sampling_Data[AUX1] >> 8)   , AUX1VALUE_ADDR);
 		Write_EE_Byte((Sampling_Data[AUX1] & 0xFF) , AUX1VALUE_ADDR + 1);
 	}
@@ -477,7 +477,7 @@ static void ST_StartWork(void)
 		
 		if(Sampling_Data[AUX2] < ADC_AUX_MID)      		{ Sampling_Data[AUX2] = ADC_AUX_MID  ; LED_State_ON &= ~(LED_CH6_H|LED_CH6_L) ; LED_State_ON |= LED_CH6_M ; }
 		else 				    			{ Sampling_Data[AUX2] = ADC_AUX_HIGH ; LED_State_ON &= ~(LED_CH6_M|LED_CH6_L) ; LED_State_ON |= LED_CH6_H ; }
-		//F**K , ÒòÎª RWW Ö»Ö§³Öµ¥×Ö½Ú²Ù×÷(µ¥×Ö½Ú¶ÁĞ´£¬²»Ó°Ïìµ¥Æ¬»úÆäËû²Ù×÷£¬ËùÒÔ°ÑÊı¾İ²ğ·Ö³ÉÁ½¸öµ¥×Ö½ÚÊı¾İÀ´²Ù×÷)
+		//F**K , å› ä¸º RWW åªæ”¯æŒå•å­—èŠ‚æ“ä½œ(å•å­—èŠ‚è¯»å†™ï¼Œä¸å½±å“å•ç‰‡æœºå…¶ä»–æ“ä½œï¼Œæ‰€ä»¥æŠŠæ•°æ®æ‹†åˆ†æˆä¸¤ä¸ªå•å­—èŠ‚æ•°æ®æ¥æ“ä½œ)
 		Write_EE_Byte((Sampling_Data[AUX2] >> 8)   , AUX2VALUE_ADDR);
 		Write_EE_Byte((Sampling_Data[AUX2] & 0xFF) , AUX2VALUE_ADDR + 1);
 	}
@@ -487,13 +487,13 @@ static void ST_StartWork(void)
 		
 		if(Sampling_Data[AUX2] > ADC_AUX_MID)      		{ Sampling_Data[AUX2] = ADC_AUX_MID ; LED_State_ON &= ~(LED_CH6_H|LED_CH6_L) ; LED_State_ON |= LED_CH6_M ; }
 		else				   	 		{ Sampling_Data[AUX2] = ADC_AUX_LOW ; LED_State_ON &= ~(LED_CH6_H|LED_CH6_M) ; LED_State_ON |= LED_CH6_L ; }
-		//F**K , ÒòÎª RWW Ö»Ö§³Öµ¥×Ö½Ú²Ù×÷(µ¥×Ö½Ú¶ÁĞ´£¬²»Ó°Ïìµ¥Æ¬»úÆäËû²Ù×÷£¬ËùÒÔ°ÑÊı¾İ²ğ·Ö³ÉÁ½¸öµ¥×Ö½ÚÊı¾İÀ´²Ù×÷)
+		//F**K , å› ä¸º RWW åªæ”¯æŒå•å­—èŠ‚æ“ä½œ(å•å­—èŠ‚è¯»å†™ï¼Œä¸å½±å“å•ç‰‡æœºå…¶ä»–æ“ä½œï¼Œæ‰€ä»¥æŠŠæ•°æ®æ‹†åˆ†æˆä¸¤ä¸ªå•å­—èŠ‚æ•°æ®æ¥æ“ä½œ)
 		Write_EE_Byte((Sampling_Data[AUX2] >> 8)   , AUX2VALUE_ADDR);
 		Write_EE_Byte((Sampling_Data[AUX2] & 0xFF) , AUX2VALUE_ADDR + 1);
 	}	
 	
 	//======================================================================
-	// ĞÂÔö AUX3 / AUX4  ¶ÔÓ¦²¦Âë¿ª¹Ø µÚ 7 / 8 Î»
+	// æ–°å¢ AUX3 / AUX4  å¯¹åº”æ‹¨ç å¼€å…³ ç¬¬ 7 / 8 ä½
 	//======================================================================
 	if((GPIOG -> IDR & (1<<2)) == 0)
 	{
@@ -514,8 +514,8 @@ static void ST_StartWork(void)
 	}
 	
 	//======================================================================
-	//Ò£¿ØÆ÷¾²Ö¹³¬Ê±ÅĞ¶Ï:Ò¡¸Ë¾²Ö¹³¬¹ı 15Min 
-	//(1)Ò¡¸ËADÖµ±ä»¯Ğ¡ÓÚ 20  (2)ÇÒÎŞÈÎºÎ°´¼ü°´ÏÂ ÈÏÎªÒ£¿ØÆ÷¾²Ö¹
+	//é¥æ§å™¨é™æ­¢è¶…æ—¶åˆ¤æ–­:æ‘‡æ†é™æ­¢è¶…è¿‡ 15Min 
+	//(1)æ‘‡æ†ADå€¼å˜åŒ–å°äº 20  (2)ä¸”æ— ä»»ä½•æŒ‰é”®æŒ‰ä¸‹ è®¤ä¸ºé¥æ§å™¨é™æ­¢
 	//======================================================================
 	StaticOverTime();
 }
@@ -531,8 +531,8 @@ void StartUp(void)
 	pST[MenuCtrl.Sub_RunStep]();
 	
 	//======================================================================
-	//¿ÉÒÔÔÚÆô¶¯ºóÈÎºÎÊ±ºòµ÷ÕûÎ¢µ÷²ÎÊı : ·ÀÖ¹Ä³Ğ©Ê±ºòÓÍÃÅÀ­ÖÁ×îµÍÎ»Ê±£¬ ·¢ËÍÖµÈÔÈ»
-	//¸ßÓÚÆğ×ª±¨¾¯Öµ¡£ µ¼ÖÂËÀÔÚÄÇÀï
+	//å¯ä»¥åœ¨å¯åŠ¨åä»»ä½•æ—¶å€™è°ƒæ•´å¾®è°ƒå‚æ•° : é˜²æ­¢æŸäº›æ—¶å€™æ²¹é—¨æ‹‰è‡³æœ€ä½ä½æ—¶ï¼Œ å‘é€å€¼ä»ç„¶
+	//é«˜äºèµ·è½¬æŠ¥è­¦å€¼ã€‚ å¯¼è‡´æ­»åœ¨é‚£é‡Œ
 	//======================================================================
 	SetOffSet();
 }
