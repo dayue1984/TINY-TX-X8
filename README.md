@@ -10,9 +10,9 @@ Features:
 
 Working in progress, use at your own risk.
 
-//20180801: Frsky D8 is in working.
-20180802: Frsky D8 is in Alpha version. 
-20180803: D16 is in working.
+* 20180801: Frsky D8 is in working.
+* 20180802: Frsky D8 is in Alpha version. 
+* 20180803: D16 is in working.
 
 
 
