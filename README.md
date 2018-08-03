@@ -10,8 +10,9 @@ Features:
 * Select channel reverse by dip5(Aux1/3) and dip6(Aux2/4).
 
 Working in progress, use at your own risk.
-* 20180801, Frsky D8 is in working.
-
+* 20180801: Frsky D8 is in working.
+* 20180802: Frsky D8 is in Alpha version. 
+* 20180803: D16 is in working.
 
 
 
