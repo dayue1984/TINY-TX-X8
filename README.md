@@ -1,5 +1,5 @@
 What's this:
-* This is a customized firmware for kingkong tiny x8 radio with more features and better usability.
+* This is a customized firmware for KingKong(LDARC) Tiny X8 radio with more features and better usability.
 * The tiny x8 is a compact 2.4G transmitter based on STM8L052R8(64K/4K)@12Mhz and TI CC2500+CC2592.
 
 Features:
